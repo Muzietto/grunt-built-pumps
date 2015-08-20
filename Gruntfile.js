@@ -2,6 +2,17 @@
 
 module.exports = function(grunt){
   grunt.initConfig({
+    // http://fairwaytech.com/2014/01/understanding-grunt-part-2-automated-testing-with-mocha/
+    simplemocha: {
+      options: {
+        globals: ['expect'],
+        timeout: 3000,
+        ignoreLeaks: false,
+        ui: 'bdd',
+        reporter: 'tap'
+      },
+      all: { src: 'spec/**/*.js' }
+    },
     concat: {
       js: {
         files: {
@@ -27,11 +38,12 @@ module.exports = function(grunt){
       server: ['server/js/**/*.js'],
       support: ['public/js/**/*.js']
     },
-    
+
+    // --> run 'grunt watch:lint_client'
     watch: {
       lint_client: {
-        tasks: ['jshint:client', 'concat:js', 'uglify:bundle'],
-        files: ['public/js/**/*.js']
+        tasks: ['jshint:client', 'simplemocha:all'],
+        files: ['public/js/**/*.js', 'spec/js/**/*.js']
       },
       lint_server: {
         tasks: ['jshint:server'],
@@ -45,6 +57,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-simple-mocha');
 
   grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'clean:js', 'concat:js']);
   grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'clean:js', 'concat:js', 'uglify:bundle']);
@@ -57,4 +70,6 @@ module.exports = function(grunt){
     var contents = timestamp.toString();
     grunt.file.write(options.file, contents);
   });
+  // Add a default task. This is optional, of course :) 
+  grunt.registerTask('default', 'simplemocha');
 };
