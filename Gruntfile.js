@@ -30,7 +30,7 @@ module.exports = function(grunt){
     
     watch: {
       lint_client: {
-        tasks: ['jshint:client'],
+        tasks: ['jshint:client', 'concat:js', 'uglify:bundle'],
         files: ['public/js/**/*.js']
       },
       lint_server: {
