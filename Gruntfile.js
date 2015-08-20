@@ -24,8 +24,19 @@ module.exports = function(grunt){
 
     jshint: {
       client: ['public/js/**/*.js'],
-      server: ['public/js/**/*.js'],
+      server: ['server/js/**/*.js'],
       support: ['public/js/**/*.js']
+    },
+    
+    watch: {
+      lint_client: {
+        tasks: ['jshint:client'],
+        files: ['public/js/**/*.js']
+      },
+      lint_server: {
+        tasks: ['jshint:server'],
+        files: ['srv/**/*.js']
+      }
     }
   });
 
