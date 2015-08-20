@@ -23,7 +23,9 @@ module.exports = function(grunt){
     },
 
     jshint: {
-      files: 'public/js/**/*.js'
+      client: ['public/js/**/*.js'],
+      server: ['public/js/**/*.js'],
+      support: ['public/js/**/*.js']
     }
   });
 
@@ -31,6 +33,17 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('js', 'Concatenate and minify js files', ['clean:js', 'concat:js', 'uglify:bundle']);
+  grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'clean:js', 'concat:js']);
+  grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'clean:js', 'concat:js', 'uglify:bundle']);
+  
+  grunt.registerTask('timestamp', function() {
+    var options = this.options({
+      file: '.timestamp'
+    });
+    var timestamp = new Date();
+    var contents = timestamp.toString();
+    grunt.file.write(options.file, contents);
+  });
 };
