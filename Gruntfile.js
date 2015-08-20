@@ -59,8 +59,8 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-simple-mocha');
 
-  grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'clean:js', 'concat:js']);
-  grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'clean:js', 'concat:js', 'uglify:bundle']);
+  grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'simplemocha:all', 'clean:js', 'concat:js']);
+  grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'simplemocha:all', 'clean:js', 'concat:js', 'uglify:bundle']);
   
   grunt.registerTask('timestamp', function() {
     var options = this.options({
@@ -71,5 +71,5 @@ module.exports = function(grunt){
     grunt.file.write(options.file, contents);
   });
   // Add a default task. This is optional, of course :) 
-  grunt.registerTask('default', 'simplemocha');
+  grunt.registerTask('default', 'simplemocha:all');
 };
