@@ -63,8 +63,10 @@ describe('component', function() {
       expect(v0.value()).to.be.equal(1);
       var v1 = volume(1.0012345,level(1.012345));
       expect(v1.value()).to.be.equal(1.01);
+      var v3 = volume(10.0012345,level(10.0012345));
+      expect(v3.value()).to.be.equal(100);
     });
-    it('can be increased and decreased by 0.001', function() {
+    it('can be increased and decreased by 0.01 (ten decimillis)', function() {
       var l0 = level(1)
       var v0 = volume(1, l0);
       expect(v0.value()).to.be.equal(1);
@@ -74,26 +76,49 @@ describe('component', function() {
       v0.decr();
       expect(v0.value()).to.be.equal(1);
       expect(l0.value()).to.be.equal(1);
-      v0.incr(0.0001);
+      v0.incr(0.01);
       expect(v0.value()).to.be.equal(1.01);
       expect(l0.value()).to.be.equal(1.01);
-      v0.decr(0.0001);
+      v0.decr(0.01);
+      expect(v0.value()).to.be.equal(1);
+      expect(l0.value()).to.be.equal(1);
+      v0.incr(0.006);
+      expect(v0.value()).to.be.equal(1.01);
+      expect(l0.value()).to.be.equal(1.01);
+      v0.decr(0.006);
+      expect(v0.value()).to.be.equal(1);
+      expect(l0.value()).to.be.equal(1);
+      v0.incr(0.004);
+      expect(v0.value()).to.be.equal(1);
+      expect(l0.value()).to.be.equal(1);
+      v0.decr(0.004);
       expect(v0.value()).to.be.equal(1);
       expect(l0.value()).to.be.equal(1);
     });
-    it('can be increased and decreased by n.nn', function() {
+    it('can be increased and decreased by n.nn (tens of decimillis)', function() {
       var l0 = level(1)
       var v0 = volume(1, l0);
       expect(v0.value()).to.be.equal(1);
       v0.incr(1.01);
+      expect(v0.value()).to.be.equal(2.01);
+      expect(l0.value()).to.be.equal(2.01);
+      v0.decr(1.01);
       expect(v0.value()).to.be.equal(1);
       expect(l0.value()).to.be.equal(1);
-      v0.incr(0.01);
-      expect(v0.value()).to.be.equal(1.01);
-      expect(l0.value()).to.be.equal(1.01);
-      v0.decr();
-      expect(v0.value()).to.be.equal(1);
-      expect(l0.value()).to.be.equal(1);
+
+      var l1 = level(10)
+      var v1 = volume(10, l1);
+      expect(v1.value()).to.be.equal(100);
+      v1.incr(1.01);
+      expect(v1.value()).to.be.equal(101);
+      expect(l1.value()).to.be.equal(10.1);
+      v1.decr(1.01);
+      expect(v1.value()).to.be.equal(100);
+      expect(l1.value()).to.be.equal(10);
+
+      var l2 = level(10.1)
+      var v2 = volume(10, l2);
+      expect(v2.value()).to.be.equal(101);
     });
     it('cannot go under zero', function() {
       

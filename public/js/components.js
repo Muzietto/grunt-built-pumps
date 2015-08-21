@@ -23,17 +23,19 @@ module.exports = (function () {
         return decimillifyVolume()/10000;
       },
       incr : function(val) {
-        var _val = val ? decimillify(val) : 1;
-        var _newVolume = this.value() + _val;
-        var _deltaLevel = (_newVolume - val)/centify(area);
-        level.incr(_val/centify(area));
-//        level.incr(_deltaLevel);
+        handleDelta(val, level.incr);
       },
       decr : function(val) {
-        level.decr(centify());
+        handleDelta(val, level.decr);
       }
     };
 
+    function handleDelta(val, fun) {
+      var _val = val ? centify(val) : 1;
+      if (_val !== 0) {
+        fun(_val/centify(area));
+      }      
+    }
     function decimillifyVolume() {
       return centify(area) * centify(level.value());
     }
