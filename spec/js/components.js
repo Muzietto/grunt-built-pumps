@@ -145,37 +145,68 @@ describe('component', function() {
   describe('sensor', function() {
     it('may go off when its level is > threshold', function() {
       var l0 = level(5);
-      var s0 = sensorAbove(l0,5);
+      var s0 = sensorAbove(l0, 5);
       expect(s0()).to.be.not.ok;
       l0.incr();
       expect(s0()).to.be.ok;
       l0.decr();
       expect(s0()).to.be.not.ok;
 
-      var s1 = sensor(l0,5);
+      var s1 = sensor(l0, 5);
       expect(s1()).to.be.not.ok;
       l0.incr();
       expect(s1()).to.be.ok;
     });
     it('may go off when its level is < threshold', function() {
       var l0 = level(5);
-      var s0 = sensorBelow(l0,5);
+      var s0 = sensorBelow(l0, 5);
       expect(s0()).to.be.not.ok;
       l0.decr();
       expect(s0()).to.be.ok;
     });
   });
-  
+
   describe('pump', function(){
     it('may be on or off depending on what its sensor senses', function() {
       var l0 = level();
+      var v0 = volume(10, l0);
       var s0 = sensor(l0)
-      var p0 = pump(l0, s0);
-      expect(p0.on()).to.be.not.ok;
+      var p0 = pump(v0, s0);
+      expect(p0.running()).to.be.not.ok;
       
       l0.incr();
-      expect(p0.on()).to.be.ok;
+      expect(p0.running()).to.be.ok;
+    });
+    it.skip('may be on or off depending on its switch override', function() {
+      var l0 = level(5);
+      var v0 = volume(10, l0);
+      var s0 = sensor(l0, 4);
+      var p0 = pump(v0, s0);
+      expect(p0.running()).to.be.ok;
+      p0.switch(true);
+      expect(p0.running()).to.be.ok;
+
+      p0.switch(false);
+      expect(p0.running()).to.be.not.ok;
+    });
+    it('pumps the volume depending on its flow rate', function() {
+      var l0 = level(5.01);
+      var v0 = volume(10, l0);
+      var s0 = sensorAbove(l0, 5);
+      var p0 = pump(v0, s0, 1);
+      expect(v0.value()).to.be.equal(50.1);
+      expect(l0.value()).to.be.equal(5.01);
+
+      p0.onTick(); // 1/10 s
+      expect(v0.value()).to.be.equal(50);
+      expect(l0.value()).to.be.equal(5);      
+
+      p0.onTick(); // no longer running
+      expect(v0.value()).to.be.equal(50);
+      expect(l0.value()).to.be.equal(5);      
     });
   });
 
+  
+  
 }); // end tests

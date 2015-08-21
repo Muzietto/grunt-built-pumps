@@ -52,9 +52,9 @@ module.exports = (function () {
 
   function _sensor(level, threshold, comparator) {
     comparator = comparator || gt;
-    return result;
+    return sensor;
 
-    function result() {
+    function sensor() {
       return comparator(level.value(), threshold || 0);
     }
   }
@@ -70,12 +70,18 @@ module.exports = (function () {
     };
   }
 
-  function pump(level, sensor) {
-    return {
-      on : function() {
+  function pump(volume, sensor, flowRate) {
+    var result = {
+      running : function() {
         return sensor();
+      },
+      onTick : function() {
+        if (this.running()) {
+          volume.decr(flowRate/10);
+        }
       }
     };
+    return result;
   }
 
   return {
