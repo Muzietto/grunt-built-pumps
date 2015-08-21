@@ -15,14 +15,10 @@ var sensorBelow = components.sensorBelow;
 var pump = components.pump;
 
 describe('component', function() {
-  before(function(){
-  });
-  after(function(){
-  }); 
-  beforeEach(function(){
-  });
-  afterEach(function(){
-  });
+  before(function(){ });
+  after(function(){ }); 
+  beforeEach(function(){ });
+  afterEach(function(){ });
 
   describe('level', function() {
     it('can be created with starting value or with default zero', function() {
@@ -63,19 +59,41 @@ describe('component', function() {
   
   describe('volume', function() {
     it('has a base area and a level with precision 1e-2', function() {
-      var v0 = volume(10.0012345,level(5.0012345));
-      expect(v0.value()).to.be.equal(50);
+      var v0 = volume(1.0012345,level(1.0012345));
+      expect(v0.value()).to.be.equal(1);
+      var v1 = volume(1.0012345,level(1.012345));
+      expect(v1.value()).to.be.equal(1.01);
     });
-    it('can be increased and decreased by 0.0001', function() {
-      var l0 = level(5)
-      var v0 = volume(10, l0);
-      expect(v0.value()).to.be.equal(50);
+    it('can be increased and decreased by 0.001', function() {
+      var l0 = level(1)
+      var v0 = volume(1, l0);
+      expect(v0.value()).to.be.equal(1);
       v0.incr();
-      expect(v0.value()).to.be.equal(50.0001);
-      expect(l0.value()).to.be.equal(5);
+      expect(v0.value()).to.be.equal(1.01);
+      expect(l0.value()).to.be.equal(1.01);
       v0.decr();
-      expect(v0.value()).to.be.equal(50);
-      expect(l0.value()).to.be.equal(5);
+      expect(v0.value()).to.be.equal(1);
+      expect(l0.value()).to.be.equal(1);
+      v0.incr(0.0001);
+      expect(v0.value()).to.be.equal(1.01);
+      expect(l0.value()).to.be.equal(1.01);
+      v0.decr(0.0001);
+      expect(v0.value()).to.be.equal(1);
+      expect(l0.value()).to.be.equal(1);
+    });
+    it('can be increased and decreased by n.nn', function() {
+      var l0 = level(1)
+      var v0 = volume(1, l0);
+      expect(v0.value()).to.be.equal(1);
+      v0.incr(1.01);
+      expect(v0.value()).to.be.equal(1);
+      expect(l0.value()).to.be.equal(1);
+      v0.incr(0.01);
+      expect(v0.value()).to.be.equal(1.01);
+      expect(l0.value()).to.be.equal(1.01);
+      v0.decr();
+      expect(v0.value()).to.be.equal(1);
+      expect(l0.value()).to.be.equal(1);
     });
     it('cannot go under zero', function() {
       

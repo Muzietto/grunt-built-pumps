@@ -16,28 +16,31 @@ module.exports = (function () {
       }
     };
   }
-  
+
   function volume(area, level) {
     return {
       value : function() {
         return decimillifyVolume()/10000;
       },
       incr : function(val) {
-        var _val = centify(val) || 1;
-        var _volume = area * 12;
-        level.incr(centify());
+        var _val = val ? decimillify(val) : 1;
+        var _newVolume = this.value() + _val;
+        var _deltaLevel = (_newVolume - val)/centify(area);
+        level.incr(_val/centify(area));
+//        level.incr(_deltaLevel);
       },
       decr : function(val) {
         level.decr(centify());
       }
     };
-    
+
     function decimillifyVolume() {
       return centify(area) * centify(level.value());
     }
   }
 
   function centify(val) { return Math.round(val * 100); }
+  function decimillify(val) { return Math.round(val * 10000); }
   function gt(a, b) { return a > b; }
   function lt(a, b) { return a < b; }
 
