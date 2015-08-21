@@ -52,8 +52,12 @@ describe('component', function() {
       l1.incr(12.12345);
       expect(l1.value()).to.be.equal(12.12);
       l1.decr(2.0012345);
-      expect(l1.value()).to.be.equal(10.12);
-      
+      expect(l1.value()).to.be.equal(10.12);      
+    });
+    it('cannot go under 0', function() {
+      var ll = level(10); 
+      ll.decr(12); 
+      expect(ll.value()).to.be.equal(0);
     });
   });
   
@@ -120,8 +124,21 @@ describe('component', function() {
       var v2 = volume(10, l2);
       expect(v2.value()).to.be.equal(101);
     });
+    it('can be increased/decreased through its level', function() {
+      var l1 = level(10)
+      var v1 = volume(10, l1);
+      l1.incr(1);
+      expect(v1.value()).to.be.equal(110);      
+    });
     it('cannot go under zero', function() {
-      
+      var l1 = level(10)
+      var v1 = volume(10, l1);
+      v1.decr(102);
+      expect(v1.value()).to.be.equal(0);
+      l1.incr(1);
+      expect(v1.value()).to.be.equal(10);
+      l1.decr(2);
+      expect(v1.value()).to.be.equal(0);
     });
   });
 

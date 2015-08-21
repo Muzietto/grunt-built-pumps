@@ -13,8 +13,12 @@ module.exports = (function () {
       },
       decr : function(val) {
         _level -= centify(val) || 1;
+        reset();
       }
     };
+    function reset() {
+      if (_level < 0) { _level = 0; }
+    }
   }
 
   function volume(area, level) {
