@@ -7,6 +7,8 @@ var expect = chai.expect
 chai.use(require('sinon-chai'))
 
 var components = require('../../public/js/components.js');
+var widgets = require('../../public/js/widgets.js');
+
 var level = components.level;
 var volume = components.volume;
 var sensor = components.sensor;

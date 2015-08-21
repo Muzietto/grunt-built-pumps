@@ -1,5 +1,5 @@
 
-module.exports = (function () {
+var COMPONENTS = (function () {
   'use strict'; 
 
   function level(start) {
@@ -93,3 +93,7 @@ module.exports = (function () {
     pump: pump
   };
 }());
+
+if (typeof module === 'object' && typeof module.exports !== 'undefined') {
+  module.exports = COMPONENTS;
+}
