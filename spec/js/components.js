@@ -142,6 +142,10 @@ describe('component', function() {
       l1.decr(2);
       expect(v1.value()).to.be.equal(0);
     });
+    it('returns its area and level value when asked', function() {
+      expect(volume(110, level(23)).area()).to.be.equal(110);      
+      expect(volume(110, level(23)).levelValue()).to.be.equal(23);      
+    });
   });
 
   describe('sensor', function() {

@@ -31,6 +31,12 @@ var COMPONENTS = (function () {
       },
       decr : function(val) {
         handleDelta(val, level.decr);
+      },
+      area : function() {
+        return area;
+      },
+      levelValue : function() {
+        return level.value();
       }
     };
 
