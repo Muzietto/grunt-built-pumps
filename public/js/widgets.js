@@ -26,9 +26,9 @@ var WIDGETS = function(eventer, components) {
     };
   }
 
-  // sensor must be based on an eventedLevel  
+  // sensor must be based on an eventedLevel
   function positionalProbe(sensor, $parent, left, template) {
-    var widget = eventer(liquidProbe(sensor, template).init($parent, sensor.threshold(), left));
+    var widget = eventer(liquidProbe(sensor, template).init($parent, sensor.threshold() - 15, left));
     widget.on('repaint', function() { widget.repaint(); });
     return widget;
   }
@@ -46,6 +46,7 @@ var WIDGETS = function(eventer, components) {
           return this;
         },
         repaint: function() {
+          //_$widget.remove();
           _$widget = undefined;
           _$widget = $widget();
           _$widget.appendTo(_$parent);
@@ -61,7 +62,8 @@ var WIDGETS = function(eventer, components) {
     function $widget() {
       return $(markup())
         .css('bottom', _bottom)
-        .css('left', _left);
+        .css('left', _left)
+        .css('z-index', 99);
     }
     
     function stdTemplate(sensor) {
@@ -73,6 +75,13 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
+  // evented widget
+  function eventedBasin(volume, $parent, left, template) {
+    var widget = eventer(basin(volume, undefined, template).init($parent, 0, left));
+    widget.on('repaint', function() { widget.repaint(); });
+    return widget;
+  }
+
   function basin(volume, dimensions, template) {
     var _$widget = $(''), _$parent, _bottom, _left;
     dimensions = dimensions || {
@@ -80,7 +89,7 @@ var WIDGETS = function(eventer, components) {
       height : Math.round(volume.levelValue() * 1.5)
     };
     return result();
-    
+
     function result() {
       return {
         init: function($parent, bottom, left) {
@@ -90,6 +99,7 @@ var WIDGETS = function(eventer, components) {
           return this;
         },
         repaint: function() {
+          //_$widget.remove();
           _$widget = undefined;
           _$widget = $widget();
           _$widget.appendTo(_$parent);
@@ -100,7 +110,7 @@ var WIDGETS = function(eventer, components) {
         }
       };
     }
-    
+
     function markup() { 
       return (template) ? template.process(volume) : stdTemplate(volume);
     }
@@ -116,7 +126,7 @@ var WIDGETS = function(eventer, components) {
       var basinDims = 'width:'+dimensions.width+'px;height:' + dimensions.height + 'px;';
       var volumeDims = 'width:100%;height:' + volume.levelValue() + 'px;';
       return '' +
-        '<div class="basin outer absolute" id="" style="border:1px solid black;'+ basinDims +'">' +
+        '<div class="basin outer absolute" id="" style="background-color:lightcoral;border:1px solid black;'+ basinDims +'">' +
         '<div class="inner absolute" id="" style="background-color:white;bottom:0px;left:0px;'+ volumeDims +'"></div>' +
         '</div>';
     }    
@@ -125,6 +135,7 @@ var WIDGETS = function(eventer, components) {
   return {
     eventedLevel : eventedLevel,
     positionalProbe : positionalProbe,
+    eventedBasin : eventedBasin,
     liquidProbe : liquidProbe,
     basin : basin
   };  

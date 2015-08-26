@@ -42,8 +42,11 @@
           var evlevello = WIDGETS.eventedLevel(35);
           var thirdProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 46), $('#parentDiv'), 280).repaint();
           var fourthProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), $('#parentDiv'), 380).repaint();
-          var volumello = COMPONENTS.volume(5600, evlevello);
-          var basinello = WIDGETS.basin(volumello).init($('#parentDiv'), 0, 480).repaint();
+          
+          var volumello = COMPONENTS.volume(25000, evlevello);
+          var basinello = WIDGETS.eventedBasin(volumello, $('#parentDiv'), 480).repaint();
+          var topBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 37), basinello.domNode(), 10).repaint();
+          var bottomBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), basinello.domNode(), 50).repaint();
         </script>
     </body>
 </html>
