@@ -6,7 +6,7 @@ module.exports = function(grunt){
     simplemocha: {
       options: {
         globals: ['expect'],
-        timeout: 3000,
+        timeout: 1000,
         ignoreLeaks: false,
         ui: 'bdd',
         reporter: 'tap'
@@ -34,7 +34,7 @@ module.exports = function(grunt){
     },
 
     jshint: {
-      client: ['public/js/**/*.js'],
+      client: ['public/js/**/*.js', '!public/js/utils/**/*.js'],
       server: ['server/js/**/*.js'],
       support: ['public/js/**/*.js']
     },

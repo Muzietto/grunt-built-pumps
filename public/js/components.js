@@ -34,10 +34,10 @@ var COMPONENTS = (function () {
       }
     };
 
-    function handleDelta(val, fun) {
+    function handleDelta(val, handler) {
       var _val = val ? centify(val) : 1;
       if (_val !== 0) {
-        fun(_val/centify(area));
+        handler(_val/centify(area));
       }      
     }
     function decimillifyVolume() {
@@ -52,13 +52,13 @@ var COMPONENTS = (function () {
 
   function _sensor(level, threshold, comparator) {
     comparator = comparator || gt;
-    return sensor;
-
-    function sensor() {
+    var result = function sensor() {
       return comparator(level.value(), threshold || 0);
-    }
+    };
+    result.threshold = function() { return threshold; };
+    return result;
   }
-  
+
   function sensorAbove() {
     return function(level, threshold) {
       return _sensor(level, threshold, gt);

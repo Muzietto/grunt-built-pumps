@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <title>sample_01</title>
+
+        <style type="text/css">
+          .horizon {
+            width: 80%;
+            min-height: 300px;
+            margin: 0 auto;
+            background-color: lightcoral;
+          }
+          .absolute { position: absolute; }
+          .relative { position: relative; }
+          div.circular {
+            width:30px;
+            height:30px;
+            border-radius:15px;
+            border: 1px solid black;
+          }
+          div.circular div { margin-top: 7px; margin-left: 7px;}
+        </style>
+        <script type="text/javascript" src="../js/utils/jquery-1.4.4.js"></script>
+        <script type="text/javascript" src="../js/utils/helpers.js"></script>
+        <script type="text/javascript" src="../js/utils/resig.js"></script>
+
+        <script type="text/javascript" src="../js/components.js"></script>
+        <script type="text/javascript" src="../js/eventer.js"></script>
+        <script type="text/javascript" src="../js/widgets.js"></script>
+    </head>
+    <body>
+        <h1 style="margin-left:20px;">grunt-built-pumps sample_01</h1>
+        <div class="horizon relative" id="parentDiv"></div>
+
+        <script type="text/javascript">
+          var levello = COMPONENTS.level(25)
+          var zenzor = COMPONENTS.sensorAbove(levello, 20);
+          var firstProbeEver = WIDGETS.liquidProbe(zenzor).init($('#parentDiv'),180,80).repaint();
+          var zenzor2 = COMPONENTS.sensorAbove(levello, 30);
+          var secondProbeEver = WIDGETS.liquidProbe(zenzor2).init($('#parentDiv'),180,180).repaint();
+        </script>
+    </body>
+</html>
+ 

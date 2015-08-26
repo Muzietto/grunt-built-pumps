@@ -166,7 +166,11 @@ describe('component', function() {
       l0.decr();
       expect(s0()).to.be.ok;
     });
-  });
+    it('provides a getter for its threshold', function() {
+      var l0 = level(5);
+      var s0 = sensorBelow(l0, 6);
+      expect(s0.threshold()).to.be.equal(6);
+    });  });
 
   describe('pump', function(){
     it('may be on or off depending on what its sensor senses', function() {
