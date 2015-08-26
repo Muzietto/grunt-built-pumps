@@ -1,22 +1,47 @@
-var EVENTER;
+var EVENTER, COMPONENTS;
 
 if (typeof module === 'object' && typeof module.exports !== 'undefined') {
   EVENTER = require('./eventer.js');
+  COMPONENTS = require('./components.js');
 }
 
 EVENTER = EVENTER || eventerFactory();
+ 
+var WIDGETS = function(eventer, components) {
+  
+  function eventedLevel(start) {
+    var _level = eventer(components.level(start));
+    return {
+      value : _level.value,
+      incr : function(val) {
+        _level.incr(val);
+        _level.trigger('changed_level', val);
+        _level.trigger('repaint');
+      },
+      decr : function(val) {
+        _level.decr(val);
+        _level.trigger('changed_level', (0 - val));
+        _level.trigger('repaint');
+      }
+    };
+  }
 
-var WIDGETS = function(eventer) {
+  // sensor must be based on an eventedLevel  
+  function positionalProbe(sensor, $parent, left, template) {
+    var widget = eventer(liquidProbe(sensor, template).init($parent, sensor.threshold(), left));
+    widget.on('repaint', function() { widget.repaint(); });
+    return widget;
+  }
 
   function liquidProbe(sensor, template) {
-    var _$widget = $(''), _$parent, _top, _left;
+    var _$widget = $(''), _$parent, _bottom, _left;
     return result();
     
     function result() {
       return {
-        init: function($parent, top, left) {
+        init: function($parent, bottom, left) {
           _$parent = $parent;
-          _top = top;
+          _bottom = bottom;
           _left = left;
           return this;
         },
@@ -35,7 +60,7 @@ var WIDGETS = function(eventer) {
 
     function $widget() {
       return $(markup())
-        .css('top', _top)
+        .css('bottom', _bottom)
         .css('left', _left);
     }
     
@@ -52,13 +77,14 @@ var WIDGETS = function(eventer) {
     
   }
 
-
   return {
+    eventedLevel : eventedLevel,
+    positionalProbe : positionalProbe,
     liquidProbe : liquidProbe,
     basin : basin
   };  
    
-}(EVENTER);
+}(EVENTER, COMPONENTS);
 
 
 if (typeof module === 'object' && typeof module.exports !== 'undefined') {

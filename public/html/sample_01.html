@@ -29,16 +29,19 @@
         <script type="text/javascript" src="../js/eventer.js"></script>
         <script type="text/javascript" src="../js/widgets.js"></script>
     </head>
-    <body>
+    <body> 
         <h1 style="margin-left:20px;">grunt-built-pumps sample_01</h1>
         <div class="horizon relative" id="parentDiv"></div>
 
         <script type="text/javascript">
-          var levello = COMPONENTS.level(25)
+          var levello = COMPONENTS.level(25);
           var zenzor = COMPONENTS.sensorAbove(levello, 20);
-          var firstProbeEver = WIDGETS.liquidProbe(zenzor).init($('#parentDiv'),180,80).repaint();
+          var firstProbeEver = WIDGETS.liquidProbe(zenzor).init($('#parentDiv'),20,80).repaint();
           var zenzor2 = COMPONENTS.sensorAbove(levello, 30);
-          var secondProbeEver = WIDGETS.liquidProbe(zenzor2).init($('#parentDiv'),180,180).repaint();
+          var secondProbeEver = WIDGETS.liquidProbe(zenzor2).init($('#parentDiv'),30,180).repaint();
+          var evlevello = WIDGETS.eventedLevel(35);
+          var thirdProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 46), $('#parentDiv'), 280).repaint();
+          var fourthProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), $('#parentDiv'), 380).repaint();
         </script>
     </body>
 </html>
