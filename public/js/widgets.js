@@ -45,11 +45,13 @@ var WIDGETS = function(eventer, components) {
           _left = left;
           return this;
         },
-        repaint: function() {
-          //_$widget.remove();
-          _$widget = undefined;
+        paint: function() {
           _$widget = $widget();
           _$widget.appendTo(_$parent);
+          return this;
+        },
+        repaint: function() {
+          $('.liquid_probe', _$widget).css('background-color', bkgColor(sensor));
           return this;
         }
       };
@@ -61,17 +63,23 @@ var WIDGETS = function(eventer, components) {
 
     function $widget() {
       return $(markup())
-        .css('bottom', _bottom)
-        .css('left', _left)
-        .css('z-index', 99);
+        .css({'bottom' : _bottom,
+              'left' : _left,
+              'z-index': 99});
     }
     
     function stdTemplate(sensor) {
-      var bkg = 'style="background-color:' + (sensor() ? 'red' : 'green') + '"';
+      var bkg = 'style="background-color:' + bkgColor(sensor) + '"';
       return '' +
-        '<div class="liquid_probe absolute circular" id=""' + bkg + '>' +
-        '<div>' + sensor.threshold() + '</div>' +
+        '<div class="widget_container absolute" id="">' +
+        '  <div class="liquid_probe circular" ' + bkg + '>' +
+        '    <div class="sensor_threshold">' + sensor.threshold() + '</div>' +
+        '  </div>' +
         '</div>';
+    }
+    
+    function bkgColor(sensor) {
+      return sensor() ? 'red' : 'green';
     }
   }
 
@@ -98,11 +106,13 @@ var WIDGETS = function(eventer, components) {
           _left = left;
           return this;
         },
-        repaint: function() {
-          //_$widget.remove();
-          _$widget = undefined;
+        paint: function() {
           _$widget = $widget();
           _$widget.appendTo(_$parent);
+          return this;
+        },
+        repaint: function() {
+          $('.basin.inner', _$widget).css('height', volumeHeight());
           return this;
         },
         domNode: function() {
@@ -112,24 +122,31 @@ var WIDGETS = function(eventer, components) {
     }
 
     function markup() { 
-      return (template) ? template.process(volume) : stdTemplate(volume);
+      return (template) ? template.process(volume) : stdTemplate();
     }
 
     function $widget() {
       return $(markup())
-        .css('bottom', _bottom)
-        .css('left', _left);
+        .css({'bottom' : _bottom,
+              'left' : _left});
     }
-    
-    // TODO - factor in scale pixels/mm
-    function stdTemplate(volume) {
+
+    // TODO - factor scale pixels/mm in!
+    function stdTemplate() {
       var basinDims = 'width:'+dimensions.width+'px;height:' + dimensions.height + 'px;';
-      var volumeDims = 'width:100%;height:' + volume.levelValue() + 'px;';
+      var volumeDims = 'width:100%;height:' + volumeHeight() + 'px;';
       return '' +
-        '<div class="basin outer absolute" id="" style="background-color:lightcoral;border:1px solid black;'+ basinDims +'">' +
-        '<div class="inner absolute" id="" style="background-color:white;bottom:0px;left:0px;'+ volumeDims +'"></div>' +
+        '<div class="widget_container absolute" id="">' +
+        '  <div class="basin outer" style="background-color:lightcoral;border:1px solid black;'+ basinDims +'">' +
+        '    <div class="basin inner absolute" id="" style="background-color:white;bottom:0px;left:0px;'+ volumeDims +'"></div>' +
+        '  </div>' +
         '</div>';
     }    
+
+    // output shall always be in pixels!!!
+    function volumeHeight() {
+      return volume.levelValue();
+    }
   }
 
   return {

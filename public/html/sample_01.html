@@ -10,7 +10,7 @@
             min-height: 300px;
             margin: 0 auto;
             background-color: lightcoral;
-          }
+          } 
           .absolute { position: absolute; }
           .relative { position: relative; }
           div.circular {
@@ -19,7 +19,45 @@
             border-radius:15px;
             border: 1px solid black;
           }
-          div.circular div { margin-top: 7px; margin-left: 7px;}
+          div.circular div.sensor_threshold { 
+            margin-top: 7px; 
+            margin-left: 7px;
+          }
+          
+          .arrow-up {
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 26px solid #000000;
+          }
+
+          .arrow-down {
+            top: 5px;
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 26px solid #000000;
+          }
+
+          .arrow-right {
+            left: 6px;
+            width: 0; 
+            height: 0; 
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 26px solid #000000;
+          }
+
+          .arrow-left {
+            left: -2px;
+            width: 0; 
+            height: 0; 
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent; 
+            border-right:  26px solid #000000; 
+          }
         </style>
         <script type="text/javascript" src="../js/utils/jquery-1.4.4.js"></script>
         <script type="text/javascript" src="../js/utils/helpers.js"></script>
@@ -31,22 +69,35 @@
     </head>
     <body> 
         <h1 style="margin-left:20px;">grunt-built-pumps sample_01</h1>
-        <div class="horizon relative" id="parentDiv"></div>
+        <div class="horizon relative" id="parentDiv">
+          <div class="circular absolute" style="background-color:green;">
+            <div class="arrow-down relative"></div>
+          </div>
+          <div class="circular absolute" style="background-color:red;left:40px;">
+            <div class="arrow-up relative"></div>
+          </div>
+          <div class="circular absolute" style="background-color:green;left:80px;">
+            <div class="arrow-left relative"></div>
+          </div>
+          <div class="circular absolute" style="background-color:red;left:120px;">
+            <div class="arrow-right relative"></div>
+          </div>
+        </div>
 
         <script type="text/javascript">
           var levello = COMPONENTS.level(25);
           var zenzor = COMPONENTS.sensorAbove(levello, 20);
-          var firstProbeEver = WIDGETS.liquidProbe(zenzor).init($('#parentDiv'),20,80).repaint();
+          var firstProbeEver = WIDGETS.liquidProbe(zenzor).init($('#parentDiv'),20,80).paint();
           var zenzor2 = COMPONENTS.sensorAbove(levello, 30);
-          var secondProbeEver = WIDGETS.liquidProbe(zenzor2).init($('#parentDiv'),30,180).repaint();
+          var secondProbeEver = WIDGETS.liquidProbe(zenzor2).init($('#parentDiv'),30,180).paint();
           var evlevello = WIDGETS.eventedLevel(35);
-          var thirdProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 46), $('#parentDiv'), 280).repaint();
-          var fourthProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), $('#parentDiv'), 380).repaint();
+          var thirdProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 46), $('#parentDiv'), 280).paint();
+          var fourthProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), $('#parentDiv'), 380).paint();
           
           var volumello = COMPONENTS.volume(25000, evlevello);
-          var basinello = WIDGETS.eventedBasin(volumello, $('#parentDiv'), 480).repaint();
-          var topBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 37), basinello.domNode(), 10).repaint();
-          var bottomBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), basinello.domNode(), 50).repaint();
+          var basinello = WIDGETS.eventedBasin(volumello, $('#parentDiv'), 480).paint();
+          var topBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 37), basinello.domNode(), 10).paint();
+          var bottomBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), basinello.domNode(), 50).paint();
         </script>
     </body>
 </html>

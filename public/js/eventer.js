@@ -5,7 +5,7 @@ function eventerFactory() {
   var result = function(object) {
     object = object || {};
     if (object.on) { return object; }
-
+ 
     object.on = function (event, callback) {
       if (!object._events) { object._events = {}; }
       if (!object._events[event]) { object._events[event] = []; }
