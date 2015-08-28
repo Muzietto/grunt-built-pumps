@@ -70,19 +70,59 @@
     <body> 
         <h1 style="margin-left:20px;">grunt-built-pumps sample_01</h1>
         <div class="horizon relative" id="parentDiv">
-          <div class="circular absolute" style="background-color:green;">
+          <div class="circular absolute dragdrop" id="arrowdown" style="background-color:green;" draggable="true">
             <div class="arrow-down relative"></div>
           </div>
-          <div class="circular absolute" style="background-color:red;left:40px;">
+          <div class="circular absolute dragdrop" id="arrowup" style="background-color:red;left:40px;" draggable="true">
             <div class="arrow-up relative"></div>
           </div>
-          <div class="circular absolute" style="background-color:green;left:80px;">
+          <div class="circular absolute dragdrop" id="arrowleft" style="background-color:green;left:80px;" draggable="true">
             <div class="arrow-left relative"></div>
           </div>
-          <div class="circular absolute" style="background-color:red;left:120px;">
+          <div class="circular absolute dragdrop" id="arrowright" style="background-color:red;left:120px;" draggable="true">
             <div class="arrow-right relative"></div>
           </div>
+          <div class="absolute dragTarg" dropzone="true" id="target" style="width:200px;height:200px;border:1px solid red;bottom:0px;right:0px;"></div>
         </div>
+        <script>
+          var circles = document.querySelectorAll('.dragdrop');
+            for(var i=0;i<circles.length;i++){
+            circles[i].addEventListener('dragstart', startDrag, false);
+            circles[i].addEventListener('dragend', endDrag, false);
+          }
+          
+          function startDrag(event) {
+            this.style.border = '5px solid blue';
+            event.dataTransfer.setData("text", this.id);
+            
+          }
+          function endDrag(event) {
+            this.style.border = '';
+          }
+          
+          function dropit(event){
+            debugger;
+            event.preventDefault();
+            //inside my mouse events handler: http://stackoverflow.com/questions/11334452/event-offsetx-in-firefox
+            var anOffsetX = (event.offsetX !== undefined) ? event.offsetX : (event.layerX - event.target.offsetLeft);
+            var anOffsetY = (event.offsetY !== undefined) ? event.offsetY : (event.layerY - event.target.offsetTop);
+            var myElement = document.querySelector('#'
+              + event.dataTransfer.getData('text'));
+            this.appendChild(myElement, false);
+            myElement.style.left = anOffsetX + 'px';
+            myElement.style.top = anOffsetY + 'px';
+          };
+          
+          var dragTarg = document.querySelector('.dragTarg');
+          dragTarg.addEventListener('dragenter', function(e){
+            this.style.border = '3px #aaa dashed'});
+          dragTarg.addEventListener('dragleave', function(e){
+            this.style.border = '3px solid black'});
+          dragTarg.addEventListener('dragover', function(e){
+            e.preventDefault();
+          });
+          dragTarg.addEventListener('drop', dropit, false);
+        </script>
 
         <script type="text/javascript">
           var levello = COMPONENTS.level(25);
