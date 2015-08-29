@@ -2,6 +2,9 @@
 
 module.exports = function(grunt){
   grunt.initConfig({
+    // used by the changelog task
+    pkg: grunt.file.readJSON('package.json'),
+
     // http://fairwaytech.com/2014/01/understanding-grunt-part-2-automated-testing-with-mocha/
     simplemocha: {
       options: {
@@ -50,13 +53,21 @@ module.exports = function(grunt){
         files: ['srv/**/*.js']
       }
     },
-    
+
     bump: {
       options: {
+        updateConfigs: ['pkg'],
+        commitFiles: ['package.json', 'CHANGELOG.md'],
         commit: true,
         createTag: true,
         push: true,
         pushTo: "origin"
+      }
+    },
+    
+    conventionalChangelog: {
+      options: {
+        editor: "notepad++"
       }
     }
   });
@@ -70,9 +81,10 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-conventional-changelog');
 
+  grunt.registerTask('notes', ['bump-only', 'conventionalChangelog', 'bump-commit']);
   grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'simplemocha:all', 'clean:js', 'concat:js']);
-  grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'simplemocha:all', 'clean:js', 'concat:js', 'uglify:bundle']);
-  
+  grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'simplemocha:all', 'clean:js', 'concat:js', 'uglify:bundle', 'bump-remote']);
+
   grunt.registerTask('timestamp', function() {
     var options = this.options({
       file: '.timestamp'
