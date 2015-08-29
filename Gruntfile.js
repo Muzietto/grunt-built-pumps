@@ -49,6 +49,15 @@ module.exports = function(grunt){
         tasks: ['jshint:server'],
         files: ['srv/**/*.js']
       }
+    },
+    
+    bump: {
+      options: {
+        commit: true,
+        createTag: true,
+        push: true,
+        pushTo: "origin"
+      }
     }
   });
 
@@ -58,6 +67,8 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-simple-mocha');
+  grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-conventional-changelog');
 
   grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'simplemocha:all', 'clean:js', 'concat:js']);
   grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'simplemocha:all', 'clean:js', 'concat:js', 'uglify:bundle']);
