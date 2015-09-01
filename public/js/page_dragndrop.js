@@ -19,18 +19,17 @@ function dropit(event){
   //inside my mouse events handler: http://stackoverflow.com/questions/11334452/event-offsetx-in-firefox
   var anOffsetX = (event.offsetX !== undefined) ? event.offsetX : (event.layerX - event.target.offsetLeft);
   var anOffsetY = (event.offsetY !== undefined) ? event.offsetY : (event.layerY - event.target.offsetTop);
-  var myElement = document.querySelector('#'
-    + event.dataTransfer.getData('text'));
+  var myElement = document.querySelector('#' + event.dataTransfer.getData('text'));
   this.appendChild(myElement, false);
   myElement.style.left = anOffsetX + 'px';
   myElement.style.top = anOffsetY + 'px';
-};
+}
 
 var dragTarg = document.querySelector('.dragTarg');
 dragTarg.addEventListener('dragenter', function(e){
-  this.style.border = '3px #aaa dashed'});
+  this.style.border = '3px #aaa dashed'; });
 dragTarg.addEventListener('dragleave', function(e){
-  this.style.border = '3px solid black'});
+  this.style.border = '3px solid black'; });
 dragTarg.addEventListener('dragover', function(e){
   e.preventDefault();
 });
