@@ -67,7 +67,7 @@ module.exports = function(grunt){
     
     conventionalChangelog: {
       options: {
-        editor: "notepad++"
+        editor: "notepad"
       }
     }
   });
