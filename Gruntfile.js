@@ -28,7 +28,7 @@ module.exports = function(grunt){
               username: '<%= secret.production.username %>',
               password: '<%= secret.production.password %>',
               port: '<%= secret.production.port %>',
-              releases_to_keep: '5',
+              releases_to_keep: '1',
               release_subdir: 'node.faustinelli.org/grunt-built-pumps'
           }
       }
@@ -48,7 +48,7 @@ module.exports = function(grunt){
     concat: {
       js: {
         files: {
-          'build/js/bundle.js': 'public/js/**/*.js'
+          'build/temp/bundle.js': 'public/js/**/*.js'
         }
       },
       css: {
@@ -61,13 +61,14 @@ module.exports = function(grunt){
     uglify: {
       bundle: {
         files: {
-          'build/js/all.min.js': 'build/js/bundle.js'
+          'build/js/all.min.js': 'build/temp/bundle.js'
         }
       }
     },
 
     clean: {
-      build: ['build']
+      build: ['build'],
+      build_temp: ['build/temp']
     },
 
     jshint: {
@@ -116,8 +117,18 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-ssh-deploy');
 
   grunt.registerTask('notes', ['bump-only', 'conventionalChangelog', 'bump-commit']);
-  grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'simplemocha:all', 'clean:build']);
-  grunt.registerTask('build:release', 'Concatenate and minify js files', ['jshint', 'simplemocha:all', 'clean:build', 'concat:js', 'uglify:bundle',/* 'bump',*/ 'ssh_deploy:production']);
+  grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'simplemocha:all']);
+  grunt.registerTask('build:release',
+                     'Concatenate and minify js files',
+                     ['jshint',
+                      'simplemocha:all',
+                      'clean:build',
+                      'concat:css',
+                      'concat:js',
+                      'uglify:bundle',
+                      'clean:build_temp',
+                      /* 'bump',*/
+                      'ssh_deploy:production']);
 
   grunt.registerTask('timestamp', function() {
     var options = this.options({
