@@ -4,61 +4,8 @@
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
         <title>sample_01</title>
 
-        <style type="text/css">
-          .horizon {
-            width: 80%;
-            min-height: 300px;
-            margin: 0 auto;
-            background-color: lightcoral;
-          } 
-          .absolute { position: absolute; }
-          .relative { position: relative; }
-          div.circular {
-            width:30px;
-            height:30px;
-            border-radius:15px;
-            border: 1px solid black;
-          }
-          div.circular div.sensor_threshold { 
-            margin-top: 7px; 
-            margin-left: 7px;
-          }
-          
-          .arrow-up {
-            width: 0; 
-            height: 0; 
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 26px solid #000000;
-          }
-
-          .arrow-down {
-            top: 5px;
-            width: 0; 
-            height: 0; 
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 26px solid #000000;
-          }
-
-          .arrow-right {
-            left: 6px;
-            width: 0; 
-            height: 0; 
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-left: 26px solid #000000;
-          }
-
-          .arrow-left {
-            left: -2px;
-            width: 0; 
-            height: 0; 
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent; 
-            border-right:  26px solid #000000; 
-          }
-        </style>
+        <link rel="stylesheet" type="text/css" href="../css/main.css"></link>
+        
         <script type="text/javascript" src="../js/utils/jquery-1.4.4.js"></script>
         <script type="text/javascript" src="../js/utils/helpers.js"></script>
         <script type="text/javascript" src="../js/utils/resig.js"></script>
@@ -84,61 +31,8 @@
           </div>
           <div class="absolute dragTarg" dropzone="true" id="target" style="width:200px;height:200px;border:1px solid red;bottom:0px;right:0px;"></div>
         </div>
-        <script>
-          var circles = document.querySelectorAll('.dragdrop');
-            for(var i=0;i<circles.length;i++){
-            circles[i].addEventListener('dragstart', startDrag, false);
-            circles[i].addEventListener('dragend', endDrag, false);
-          }
-          
-          function startDrag(event) {
-            this.style.border = '5px solid blue';
-            event.dataTransfer.setData("text", this.id);
-            
-          }
-          function endDrag(event) {
-            this.style.border = '';
-          }
-          
-          function dropit(event){
-            debugger;
-            event.preventDefault();
-            //inside my mouse events handler: http://stackoverflow.com/questions/11334452/event-offsetx-in-firefox
-            var anOffsetX = (event.offsetX !== undefined) ? event.offsetX : (event.layerX - event.target.offsetLeft);
-            var anOffsetY = (event.offsetY !== undefined) ? event.offsetY : (event.layerY - event.target.offsetTop);
-            var myElement = document.querySelector('#'
-              + event.dataTransfer.getData('text'));
-            this.appendChild(myElement, false);
-            myElement.style.left = anOffsetX + 'px';
-            myElement.style.top = anOffsetY + 'px';
-          };
-          
-          var dragTarg = document.querySelector('.dragTarg');
-          dragTarg.addEventListener('dragenter', function(e){
-            this.style.border = '3px #aaa dashed'});
-          dragTarg.addEventListener('dragleave', function(e){
-            this.style.border = '3px solid black'});
-          dragTarg.addEventListener('dragover', function(e){
-            e.preventDefault();
-          });
-          dragTarg.addEventListener('drop', dropit, false);
-        </script>
-
-        <script type="text/javascript">
-          var levello = COMPONENTS.level(25);
-          var zenzor = COMPONENTS.sensorAbove(levello, 20);
-          var firstProbeEver = WIDGETS.liquidProbe(zenzor).init($('#parentDiv'),20,80).paint();
-          var zenzor2 = COMPONENTS.sensorAbove(levello, 30);
-          var secondProbeEver = WIDGETS.liquidProbe(zenzor2).init($('#parentDiv'),30,180).paint();
-          var evlevello = WIDGETS.eventedLevel(35);
-          var thirdProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 46), $('#parentDiv'), 280).paint();
-          var fourthProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), $('#parentDiv'), 380).paint();
-          
-          var volumello = COMPONENTS.volume(25000, evlevello);
-          var basinello = WIDGETS.eventedBasin(volumello, $('#parentDiv'), 480).paint();
-          var topBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 37), basinello.domNode(), 10).paint();
-          var bottomBasinello = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), basinello.domNode(), 50).paint();
-        </script>
+        <script type="text/javascript" src="../js/page_dragndrop.js"></script>
+        <script type="text/javascript" src="../js/document_ready.js"></script>
     </body>
 </html>
  
