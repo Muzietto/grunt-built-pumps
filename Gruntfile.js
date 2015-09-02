@@ -53,7 +53,7 @@ module.exports = function(grunt){
       },
       css: {
         files: {
-          'build/css/bundle.css': 'public/css/**/*.css'
+          'build/public/css/bundle.css': 'public/css/**/*.css'
         }
       }
     },
@@ -61,7 +61,7 @@ module.exports = function(grunt){
     uglify: {
       bundle: {
         files: {
-          'build/js/all.min.js': 'build/temp/bundle.js'
+          'build/public/js/all.min.js': 'build/temp/bundle.js'
         }
       }
     },
@@ -69,20 +69,13 @@ module.exports = function(grunt){
     copy: {
       main: {
         files: [
-          // includes files within path
-          //{expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile'},
-
           // includes files within path and its sub-directories
-          {expand: true, src: ['public/html/**'], dest: 'build/html/'},
-          {expand: true, src: ['path/**'], dest: 'dest/'},
-          {expand: true, src: ['path/**'], dest: 'dest/'},
-          {expand: true, src: ['path/**'], dest: 'dest/'},
-
-          // makes all src relative to cwd
-          //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
-
-          // flattens results to a single level
-          //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'},
+          {expand: true, src: ['app.js'], dest: 'build/'},
+          {expand: true, src: ['package.json'], dest: 'build/'},
+          {expand: true, src: ['public/favicon.ico'], dest: 'build/'},
+          {expand: true, src: ['public/html/**'], dest: 'build/'},
+          {expand: true, src: ['public/img/**'], dest: 'build/'},
+          {expand: true, src: ['server/**'], dest: 'build/'}
         ],
       },
     },
@@ -94,7 +87,7 @@ module.exports = function(grunt){
 
     jshint: {
       client: ['public/js/**/*.js', '!public/js/utils/**/*.js' ],
-      server: ['server/js/**/*.js']
+      server: ['server/**/*.js']
     },
 
     // --> run 'grunt watch:lint_client'
@@ -105,7 +98,7 @@ module.exports = function(grunt){
       },
       lint_server: {
         tasks: ['jshint:server'],
-        files: ['srv/**/*.js']
+        files: ['server/**/*.js']
       }
     },
 
@@ -132,6 +125,7 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-conventional-changelog');
@@ -144,11 +138,12 @@ module.exports = function(grunt){
                      ['jshint',
                       'simplemocha:all',
                       'clean:build',
+                      'copy:main',
                       'concat:css',
                       'concat:js',
                       'uglify:bundle',
                       'clean:build_temp',
-                      /* 'bump',*/
+                      'bump',
                       'ssh_deploy:production']);
 
   grunt.registerTask('timestamp', function() {
