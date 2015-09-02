@@ -20,8 +20,8 @@ module.exports = function(grunt){
           port: '<%= secret.production.port %>',
           releases_to_keep: '3',
           release_subdir: '',
-          before_deploy: 'cd /sites/great_project/releases/current && forever stopall',
-          after_deploy: 'cd /sites/great_project/releases/current && npm install && forever start app.js'
+          //before_deploy: 'detect_node && kill -9 $1',
+          //after_deploy: 'cd node.faustinelli.org/grunt-built-pumps/current && npm install --production && npm start&'
         }
       }
     },
@@ -64,7 +64,7 @@ module.exports = function(grunt){
       main: {
         files: [
           // includes files within path and its sub-directories
-          {expand: true, src: ['app.js'], dest: 'build/'},
+          {expand: true, src: ['app_gbp.js'], dest: 'build/'},
           {expand: true, src: ['package.json'], dest: 'build/'},
           {expand: true, src: ['public/favicon.ico'], dest: 'build/'},
           //{expand: true, src: ['public/html/**'], dest: 'build/'},
