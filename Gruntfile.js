@@ -12,16 +12,6 @@ module.exports = function(grunt){
         current_symlink: 'current',
         deploy_path: '/var/www/vhosts/faustinelli.org/node.faustinelli.org/grunt-built-pumps'
       },
-  /*    staging: {
-          options: {
-              host: '<%= secret.staging.host %>',
-              username: '<%= secret.staging.username %>',
-              password: '<%= secret.staging.password %>',
-              port: '<%= secret.staging.port %>',
-              debug: true,
-              releases_to_keep: '3'
-          }
-      },*/
       production: {
           options: {
               host: '<%= secret.production.host %>',
@@ -147,7 +137,7 @@ module.exports = function(grunt){
   grunt.registerTask('notes', ['bump-only', 'conventionalChangelog', 'bump-commit']);
   grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'simplemocha:all']);
   grunt.registerTask('build:release',
-                     'Concatenate and minify js files',
+                     'Complete deployment workflow',
                      [
                       'jshint',
                       'simplemocha:all',
@@ -170,6 +160,7 @@ module.exports = function(grunt){
     var contents = timestamp.toString();
     grunt.file.write(options.file, contents);
   });
+
   // Add a default task. This is optional, of course :) 
   grunt.registerTask('default', 'simplemocha:all');
 };
