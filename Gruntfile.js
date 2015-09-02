@@ -28,8 +28,8 @@ module.exports = function(grunt){
               username: '<%= secret.production.username %>',
               password: '<%= secret.production.password %>',
               port: '<%= secret.production.port %>',
-              releases_to_keep: '1',
-              release_subdir: 'node.faustinelli.org/grunt-built-pumps'
+              releases_to_keep: '3',
+              release_subdir: ''
           }
       }
     },
@@ -66,6 +66,27 @@ module.exports = function(grunt){
       }
     },
 
+    copy: {
+      main: {
+        files: [
+          // includes files within path
+          //{expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile'},
+
+          // includes files within path and its sub-directories
+          {expand: true, src: ['public/html/**'], dest: 'build/html/'},
+          {expand: true, src: ['path/**'], dest: 'dest/'},
+          {expand: true, src: ['path/**'], dest: 'dest/'},
+          {expand: true, src: ['path/**'], dest: 'dest/'},
+
+          // makes all src relative to cwd
+          //{expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
+
+          // flattens results to a single level
+          //{expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'},
+        ],
+      },
+    },
+    
     clean: {
       build: ['build'],
       build_temp: ['build/temp']
