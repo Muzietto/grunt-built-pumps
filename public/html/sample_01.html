@@ -4,15 +4,20 @@
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
         <title>sample_01</title>
 
+        <!-- build:css inline ../../build/temp/bundle.css -->
         <link rel="stylesheet" type="text/css" href="../css/main.css"></link>
-        
+        <!-- /build -->
+
+        <!-- build:js inline ../../build/temp/head.min.js -->
         <script type="text/javascript" src="../js/utils/jquery-1.4.4.js"></script>
         <script type="text/javascript" src="../js/utils/helpers.js"></script>
         <script type="text/javascript" src="../js/utils/resig.js"></script>
 
-        <script type="text/javascript" src="../js/components.js"></script>
-        <script type="text/javascript" src="../js/eventer.js"></script>
-        <script type="text/javascript" src="../js/widgets.js"></script>
+        <script type="text/javascript" src="../js/head/components.js"></script>
+        <script type="text/javascript" src="../js/head/eventer.js"></script>
+        <script type="text/javascript" src="../js/head/widgets.js"></script>
+        <!-- /build -->
+
     </head>
     <body> 
         <h1 style="margin-left:20px;">grunt-built-pumps sample_01</h1>
@@ -31,8 +36,11 @@
           </div>
           <div class="absolute dragTarg" dropzone="true" id="target" style="width:200px;height:200px;border:1px solid red;bottom:0px;right:0px;"></div>
         </div>
-        <script type="text/javascript" src="../js/page_dragndrop.js"></script>
-        <script type="text/javascript" src="../js/document_ready.js"></script>
+
+        <!-- build:js inline ../../build/temp/endbody.min.js -->
+        <script type="text/javascript" src="../js/endbody/page_dragndrop.js"></script>
+        <script type="text/javascript" src="../js/endbody/document_ready.js"></script>
+        <!-- /build -->
     </body>
 </html>
  

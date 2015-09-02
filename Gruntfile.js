@@ -48,12 +48,13 @@ module.exports = function(grunt){
     concat: {
       js: {
         files: {
-          'build/temp/bundle.js': 'public/js/**/*.js'
+          'build/temp/bundle_head.js': ['public/js/utils/**/*.js', 'public/js/head/**/*.js'],
+          'build/temp/bundle_endbody.js': 'public/js/endbody/**/*.js'
         }
       },
       css: {
         files: {
-          'build/public/css/bundle.css': 'public/css/**/*.css'
+          'build/temp/bundle.css': 'public/css/**/*.css'
         }
       }
     },
@@ -61,7 +62,8 @@ module.exports = function(grunt){
     uglify: {
       bundle: {
         files: {
-          'build/public/js/all.min.js': 'build/temp/bundle.js'
+          'build/temp/head.min.js': 'build/temp/bundle_head.js',
+          'build/temp/endbody.min.js': 'build/temp/bundle_endbody.js'
         }
       }
     },
@@ -73,13 +75,23 @@ module.exports = function(grunt){
           {expand: true, src: ['app.js'], dest: 'build/'},
           {expand: true, src: ['package.json'], dest: 'build/'},
           {expand: true, src: ['public/favicon.ico'], dest: 'build/'},
-          {expand: true, src: ['public/html/**'], dest: 'build/'},
+          //{expand: true, src: ['public/html/**'], dest: 'build/'},
           {expand: true, src: ['public/img/**'], dest: 'build/'},
           {expand: true, src: ['server/**'], dest: 'build/'}
         ],
       },
     },
     
+    processhtml: {
+      options: {
+      },
+      main: {
+        files: {
+          'build/public/html/sample_01.html': ['public/html/sample_01.html']
+        }
+      }
+    },
+
     clean: {
       build: ['build'],
       build_temp: ['build/temp']
@@ -130,21 +142,25 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-ssh-deploy');
+  grunt.loadNpmTasks('grunt-processhtml');
 
   grunt.registerTask('notes', ['bump-only', 'conventionalChangelog', 'bump-commit']);
   grunt.registerTask('build:debug', 'minimal processing', ['jshint', 'simplemocha:all']);
   grunt.registerTask('build:release',
                      'Concatenate and minify js files',
-                     ['jshint',
+                     [
+                      'jshint',
                       'simplemocha:all',
                       'clean:build',
                       'copy:main',
                       'concat:css',
                       'concat:js',
                       'uglify:bundle',
+                      'processhtml:main',
                       'clean:build_temp',
                       'bump',
-                      'ssh_deploy:production']);
+                      'ssh_deploy:production'
+                      ]);
 
   grunt.registerTask('timestamp', function() {
     var options = this.options({
