@@ -13,14 +13,16 @@ module.exports = function(grunt){
         deploy_path: '/var/www/vhosts/faustinelli.org/node.faustinelli.org/grunt-built-pumps'
       },
       production: {
-          options: {
-              host: '<%= secret.production.host %>',
-              username: '<%= secret.production.username %>',
-              password: '<%= secret.production.password %>',
-              port: '<%= secret.production.port %>',
-              releases_to_keep: '3',
-              release_subdir: ''
-          }
+        options: {
+          host: '<%= secret.production.host %>',
+          username: '<%= secret.production.username %>',
+          password: '<%= secret.production.password %>',
+          port: '<%= secret.production.port %>',
+          releases_to_keep: '3',
+          release_subdir: '',
+          before_deploy: 'cd /sites/great_project/releases/current && forever stopall',
+          after_deploy: 'cd /sites/great_project/releases/current && npm install && forever start app.js'
+        }
       }
     },
 

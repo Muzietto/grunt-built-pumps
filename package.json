@@ -8,8 +8,7 @@
     "url": "http://faustinelli.wordpress.com"
   },
   "scripts": {
-    "start": "node app"
-  },
+    "start": "node app_gbp"  },
   "license": "GPL-2.0",
   "repository": {
     "type": "git",
