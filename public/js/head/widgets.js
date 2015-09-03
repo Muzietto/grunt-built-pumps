@@ -107,6 +107,10 @@ var WIDGETS = function(eventer, components) {
         repaint: function() {
           $('.pump_widget', _$widget).css('background-color', bkgColor());
           return this;
+        },
+        onTick: function() {
+          pump.onTick();
+          return this;
         }
       };
     }

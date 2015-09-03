@@ -22,6 +22,9 @@ The build process showcases the following grunt plugins:
 
 - use components api to increase/decrease levels
 
+### sample_01.html
+Type 'evlevello.incr(20)' or 'evlevello.decr(20)' in the console and watch the pumps restore an acceptable water level.
+
 
 ## development
 Run `grunt watch:lint_client` for automated linting and unit testing
