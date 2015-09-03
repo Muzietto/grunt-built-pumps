@@ -23,7 +23,7 @@ The build process showcases the following grunt plugins:
 - use components api to increase/decrease levels
 
 #### sample_01.html
-Type 'evlevello.incr(20)' or 'evlevello.decr(20)' in the console and watch the pumps restore an acceptable water level.
+Type `evlevello.incr(20)` or `evlevello.decr(20)` in the console and watch the pumps restore an acceptable water level.
 
 The page contains also some initial experiments with HTML5 drag'n'drop functionalities. One day these pumps and sensors 
 will be all composed dragging and dropping their widgets onto the canvas.
