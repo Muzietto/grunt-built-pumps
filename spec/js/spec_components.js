@@ -147,7 +147,7 @@ describe('component', function() {
       expect(volume(110, level(23)).levelValue()).to.be.equal(23);      
     });
   });
-
+ 
   describe('sensor', function() {
     it('may go off when its level is > threshold', function() {
       var l0 = level(5);

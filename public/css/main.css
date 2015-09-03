@@ -20,7 +20,7 @@ div.circular {
   border-radius:15px;
   border: 1px solid black;
 }
-div.circular div.sensor_threshold { 
+div.circular div.sensor_threshold {
   margin-top: 7px; 
   margin-left: 7px;
 }

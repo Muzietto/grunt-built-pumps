@@ -15,24 +15,24 @@ var WIDGETS = function(eventer, components) {
       value : _level.value,
       incr : function(val) {
         _level.incr(val);
-        _level.trigger('changed_level', val);
-        _level.trigger('repaint');
+        _level.trigger('level_change', val);
       },
       decr : function(val) {
         _level.decr(val);
-        _level.trigger('changed_level', (0 - val));
-        _level.trigger('repaint');
+        _level.trigger('level_change', (0 - val));
       }
     };
   }
 
+  // sensor threshold defines vertical position
   // sensor must be based on an eventedLevel
   function positionalProbe(sensor, $parent, left, template) {
     var widget = eventer(liquidProbe(sensor, template).init($parent, sensor.threshold() - 15, left));
-    widget.on('repaint', function() { widget.repaint(); });
+    widget.on('level_change', function() { widget.repaint(); });
     return widget;
   }
 
+  // extremely unhandy (vertical position independent from sensor threshold)
   function liquidProbe(sensor, template) {
     var _$widget = $(''), _$parent, _bottom, _left;
     return result();
@@ -85,7 +85,10 @@ var WIDGETS = function(eventer, components) {
 
   function pumpWidget(pump, template) {
     var _$widget = $(''), _$parent, _bottom, _left, _orientation;
-    return result();
+    var product = eventer(result());
+    product.on('level_change', product.repaint);
+    
+    return product;
     
     function result() {
       return {
@@ -102,7 +105,7 @@ var WIDGETS = function(eventer, components) {
           return this;
         },
         repaint: function() {
-          $('.pump_widget div', _$widget).css('background-color', bkgColor());
+          $('.pump_widget', _$widget).css('background-color', bkgColor());
           return this;
         }
       };
@@ -138,7 +141,7 @@ var WIDGETS = function(eventer, components) {
   // evented widget
   function eventedBasin(volume, $parent, left, template) {
     var widget = eventer(basin(volume, undefined, template).init($parent, 0, left));
-    widget.on('repaint', function() { widget.repaint(); });
+    widget.on('level_change', function() { widget.repaint(); });
     return widget;
   }
 
