@@ -76,6 +76,7 @@ var COMPONENTS = (function () {
     };
   }
 
+  // flowRate > 0 ==> remove water
   function pump(volume, sensor, flowRate) {
     var result = {
       running : function() {

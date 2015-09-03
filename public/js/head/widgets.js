@@ -51,14 +51,14 @@ var WIDGETS = function(eventer, components) {
           return this;
         },
         repaint: function() {
-          $('.liquid_probe', _$widget).css('background-color', bkgColor(sensor));
+          $('.liquid_probe', _$widget).css('background-color', bkgColor());
           return this;
         }
       };
     }
     
     function markup() { 
-      return (template) ? template.process(sensor) : stdTemplate(sensor);
+      return (template) ? template.process(sensor) : stdTemplate();
     }
 
     function $widget() {
@@ -68,7 +68,7 @@ var WIDGETS = function(eventer, components) {
               'z-index': 99});
     }
     
-    function stdTemplate(sensor) {
+    function stdTemplate() {
       var bkg = 'style="background-color:' + bkgColor(sensor) + '"';
       return '' +
         '<div class="widget_container absolute" id="">' +
@@ -78,9 +78,61 @@ var WIDGETS = function(eventer, components) {
         '</div>';
     }
     
-    function bkgColor(sensor) {
+    function bkgColor() {
       return sensor() ? 'red' : 'green';
     }
+  }
+
+  function pumpWidget(pump, template) {
+    var _$widget = $(''), _$parent, _bottom, _left, _orientation;
+    return result();
+    
+    function result() {
+      return {
+        init: function($parent, bottom, left, orientation) {
+          _$parent = $parent;
+          _bottom = bottom;
+          _left = left;
+          _orientation = orientation;
+          return this;
+        },
+        paint: function() {
+          _$widget = $widget();
+          _$widget.appendTo(_$parent);
+          return this;
+        },
+        repaint: function() {
+          $('.pump_widget div', _$widget).css('background-color', bkgColor());
+          return this;
+        }
+      };
+    }
+    
+    function markup() { 
+      return (template) ? template.process(pump) : stdTemplate();
+    }
+
+    function $widget() {
+      return $(markup())
+        .css({'bottom' : _bottom,
+              'left' : _left,
+              'z-index': 49});
+    }
+    
+    function stdTemplate() {
+      var bkg = 'style="background-color:' + bkgColor() + '"';
+      return '' +
+        '<div class="widget_container absolute" id="">' +
+        '  <div class="pump_widget circular absolute" ' + bkg + '>' +
+        '    <div class="arrow-' + _orientation + '"></div>' +
+        '  </div>' +
+        '</div>';
+    }
+    
+    function bkgColor() {
+      return pump.running() ? 'green' : 'red';
+    }
+    
   }
 
   // evented widget
@@ -94,7 +146,8 @@ var WIDGETS = function(eventer, components) {
     var _$widget = $(''), _$parent, _bottom, _left;
     dimensions = dimensions || {
       width : Math.round(Math.sqrt(volume.area())),
-      height : Math.round(volume.levelValue() * 1.5)
+      height : Math.round(volume.levelValue() * 1.5),
+      scale : 1 // volume_level/pixels
     };
     return result();
 
@@ -131,9 +184,9 @@ var WIDGETS = function(eventer, components) {
               'left' : _left});
     }
 
-    // TODO - factor scale pixels/mm in!
     function stdTemplate() {
-      var basinDims = 'width:'+dimensions.width+'px;height:' + dimensions.height + 'px;';
+      var basinDims = 'width:' + dimensions.width / dimensions.scale + 'px;' +
+                      'height:' + dimensions.height / dimensions.scale + 'px;';
       var volumeDims = 'width:100%;height:' + volumeHeight() + 'px;';
       return '' +
         '<div class="widget_container absolute" id="">' +
@@ -153,6 +206,7 @@ var WIDGETS = function(eventer, components) {
     eventedLevel : eventedLevel,
     positionalProbe : positionalProbe,
     eventedBasin : eventedBasin,
+    pumpWidget : pumpWidget,
     liquidProbe : liquidProbe,
     basin : basin
   };  

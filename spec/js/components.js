@@ -187,6 +187,7 @@ describe('component', function() {
       l0.incr();
       expect(p0.running()).to.be.ok;
     });
+    // TODO - implement switch override outside the pump object
     it.skip('may be on or off depending on its switch override', function() {
       var l0 = level(5);
       var v0 = volume(10, l0);
@@ -214,7 +215,7 @@ describe('component', function() {
       p0.onTick(); // no longer running
       expect(v0.value()).to.be.equal(50);
       expect(l0.value()).to.be.equal(5);      
-    });
+    }); // TODO - test negative flow rate
   });
 
   

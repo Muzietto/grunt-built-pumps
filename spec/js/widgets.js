@@ -40,6 +40,11 @@ describe('widget', function() {
       });
     });
   });
+  describe('positionalProbe (evented liquidProbe)', function() {
+    it('reacts to repaint events triggered by its eventedLevel', function() {
+    });
+  });
+
   describe('basin', function() {
     it('gets created with a volume, a scale volume_level/pixels and a rectangular template containing a display of the level', function() {
       
@@ -56,6 +61,29 @@ describe('widget', function() {
       });
     });
   });
- 
+  describe('eventedBasin (evented basin)', function() {
+    it('reacts to repaint events triggered by the eventedLevel of its volume', function() {
+    });
+  });
+
+  describe('pumpWidget', function() {
+    it('gets created with ...', function() {
+      
+    });
+    describe('once started it', function() {
+      it('has green bkg when it\' running', function() {
+        
+      });
+      it('has red bkg when it is not running', function() {
+        
+      });
+    });
+  });
+  describe('eventedPumpWidget',function(){
+    it('binds the pump onTick to a global tick event', function() {});
+  });
+
+  // pump, basin and two sensors
+  describe('feedbackSystem',function(){}); 
   
 }); // end tests
