@@ -26,35 +26,27 @@ div.circular div.sensor_threshold {
 }
 
 .arrow-up {
-  width: 0; 
-  height: 0; 
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   border-bottom: 26px solid #000000;
 }
 
 .arrow-down {
-  top: 5px;
-  width: 0; 
-  height: 0; 
+  margin-top: 5px;
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   border-top: 26px solid #000000;
 }
 
 .arrow-right {
-  left: 6px;
-  width: 0; 
-  height: 0; 
+  margin-left: 5px;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-left: 26px solid #000000;
 }
 
 .arrow-left {
-  left: -2px;
-  width: 0; 
-  height: 0; 
+  margin-right: 5px;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent; 
   border-right:  26px solid #000000; 
