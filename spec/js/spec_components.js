@@ -15,6 +15,7 @@ var sensor = components.sensor;
 var sensorAbove = components.sensorAbove;
 var sensorBelow = components.sensorBelow;
 var pump = components.pump;
+var flow = components.flow;
 
 describe('component', function() {
   before(function(){ });
@@ -147,7 +148,24 @@ describe('component', function() {
       expect(volume(110, level(23)).levelValue()).to.be.equal(23);      
     });
   });
- 
+  
+  describe('flow', function() {
+    it('is a unidirectional connection from a source to a sink',function() {
+      var lev1 = level(10)
+      var sink = volume(10, lev1);
+      var flo1 = flow(sink);
+      expect(flo1.carry.bind(flo1, 10)).to.not.throw();
+      expect(flo1.carry.bind(flo1, -10)).to.throw();
+    });
+    it('carries uncompressible liquid, with zero-sum balance', function() {
+      var lev1 = level(10)
+      var sink = volume(10, lev1);
+      var flo1 = flow(sink);
+      flo1.carry(10);
+      expect(lev1.value()).to.be.equal(11);      
+    });
+  });
+
   describe('sensor', function() {
     it('may go off when its level is > threshold', function() {
       var l0 = level(5);
@@ -200,7 +218,7 @@ describe('component', function() {
       p0.switch(false);
       expect(p0.running()).to.be.not.ok;
     });
-    it('pumps the volume depending on its flow rate', function() {
+    it('pumps OUT the volume depending on its flow rate', function() {
       var l0 = level(5.01);
       var v0 = volume(10, l0);
       var s0 = sensorAbove(l0, 5);
@@ -215,7 +233,17 @@ describe('component', function() {
       p0.onTick(); // no longer running
       expect(v0.value()).to.be.equal(50);
       expect(l0.value()).to.be.equal(5);      
-    }); // TODO - test negative flow rate
+    });
+    it('is unidirectional, but it pumps both ways', function(){
+      var l0 = level(5);
+      var v0 = volume(10, l0);
+      var s0 = sensorBelow(l0, 6);
+      var p0 = pump(v0, s0, -1);
+
+      p0.onTick(); // 1/10 s
+      expect(v0.value()).to.be.equal(50.1);
+      expect(l0.value()).to.be.equal(5.01);
+    });
   });
 
   

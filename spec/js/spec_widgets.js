@@ -26,17 +26,17 @@ describe('widget', function() {
 
   describe('liquidProbe', function() {
     it('gets created with a sensor and a circular template containing a display of the threshold', function() {
-      
+
     });
     it('gets initialized inside the page with a background color', function() {
-      
+
     });
     describe('once started it', function() {
       it('has green bkg when the sensor function returns true', function() {
-        
+
       });
       it('has red bkg when the sensor function returns false', function() {
-        
+
       });
     });
   });
