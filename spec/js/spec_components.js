@@ -218,7 +218,7 @@ describe('component', function() {
       p0.switch(false);
       expect(p0.running()).to.be.not.ok;
     });
-    it('pumps OUT the volume depending on its flow rate', function() {
+    it('pumps IN the volume depending on its flow rate', function() {
       var l0 = level(5.01);
       var v0 = volume(10, l0);
       var s0 = sensorAbove(l0, 5);

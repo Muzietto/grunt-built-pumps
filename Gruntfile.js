@@ -41,7 +41,7 @@ module.exports = function(grunt){
       js: {
         files: {
           'build/temp/bundle_head.js': ['public/js/utils/**/*.js', 'public/js/head/**/*.js'],
-          'build/temp/bundle_endbody.js': 'public/js/endbody/**/*.js'
+          'build/temp/bundle_endbody.js': 'public/js/endbody/**/*.js',
         }
       },
       css: {
