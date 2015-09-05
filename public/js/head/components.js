@@ -37,7 +37,7 @@ var COMPONENTS = (function () {
       },
       decr : function(val) {
         return handleDelta(val, level.decr);
-      },
+      }, 
       area : function() {
         return area;
       },
@@ -47,6 +47,7 @@ var COMPONENTS = (function () {
     };
 
     function handleDelta(val, handler) {
+      if (typeof val === 'undefined') throw 'must specify level increase/decrease value';
       var _val = val ? centify(val) : 1;
       if (_val !== 0) {
         return handler(_val/centify(area)) * area;
