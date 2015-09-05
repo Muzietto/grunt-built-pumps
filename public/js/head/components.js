@@ -4,16 +4,21 @@ var COMPONENTS = (function () {
 
   function level(start) {
     var _level = centify(start) || 0;
+    var handleDelta = function(operator, val) {
+      var result = _level;
+      _level = operator(_level, centify(val) || 1);
+      reset();
+      return (_level - result)/100;
+    };
     return {
       value : function() {
         return _level/100;
       },
       incr : function(val) {
-        _level += centify(val) || 1;
+        return handleDelta(function(a, b) { return a + b; }, val);
       },
       decr : function(val) {
-        _level -= centify(val) || 1;
-        reset();
+        return handleDelta(function(a, b) { return a - b; }, val);
       }
     };
     function reset() {
@@ -27,10 +32,10 @@ var COMPONENTS = (function () {
         return decimillifyVolume()/10000;
       },
       incr : function(val) {
-        handleDelta(val, level.incr);
+        return handleDelta(val, level.incr);
       },
       decr : function(val) {
-        handleDelta(val, level.decr);
+        return handleDelta(val, level.decr);
       },
       area : function() {
         return area;
@@ -43,8 +48,9 @@ var COMPONENTS = (function () {
     function handleDelta(val, handler) {
       var _val = val ? centify(val) : 1;
       if (_val !== 0) {
-        handler(_val/centify(area));
-      }      
+        return handler(_val/centify(area)) * area;
+      }
+      return 0;
     }
     function decimillifyVolume() {
       return centify(area) * centify(level.value());
@@ -76,25 +82,31 @@ var COMPONENTS = (function () {
     };
   }
 
-  // flowRate > 0 ==> add water
+  // flowRate > 0 ==> REMOVE water
   function pump(source, sensor, flowRate, sink) {
     var result = {
       running : function() {
         return sensor();
       },
-      onTick : function() {
+      onTick : function() { 
         if (this.running()) {
-          source.incr(flowRate/10);
-          if (sink) sink.decr(flowRate/10);
+          source.decr(flowRate/10);
+          if (sink) sink.incr(flowRate/10);
         }
       }
     };
-    return result;
+    return result; 
+  }
+
+  function flow(source, sink, flowRate) {
+    // TODO - implement me, I am a pump always on
+    return pump(source, function() { return true; }, flowRate, sink);
   }
 
   return {
     level: level,
     volume: volume,
+    flow: flow,
     sensor: sensorAbove(),
     sensorAbove: sensorAbove(),
     sensorBelow: sensorBelow(),

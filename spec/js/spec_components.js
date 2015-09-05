@@ -15,6 +15,7 @@ var sensor = components.sensor;
 var sensorAbove = components.sensorAbove;
 var sensorBelow = components.sensorBelow;
 var pump = components.pump;
+var flow = components.flow;
 
 describe('component', function() {
   before(function(){ });
@@ -24,207 +25,290 @@ describe('component', function() {
 
   describe('level', function() {
     it('can be created with starting value or with default zero', function() {
-      var l1 = level();
-      expect(l1.value()).to.be.equal(0);
-      var l2 = level(123);
-      expect(l2.value()).to.be.equal(123);
+      var level1 = level();
+      expect(level1.value()).to.be.equal(0);
+      var level2 = level(123);
+      expect(level2.value()).to.be.equal(123);
     });
     it('can be increased or decreased by 0.01', function() {
-      var ll = level();
-      expect(ll.value()).to.be.equal(0);
-      ll.incr();
-      expect(ll.value()).to.be.equal(0.01);
-      ll.decr();
-      expect(ll.value()).to.be.equal(0);
+      var level1 = level();
+      expect(level1.value()).to.be.equal(0);
+      level1.incr();
+      expect(level1.value()).to.be.equal(0.01);
+      level1.decr();
+      expect(level1.value()).to.be.equal(0);
     });
     it('can be increased or decreased by n', function() {
-      var ll = level();
-      expect(ll.value()).to.be.equal(0);
-      ll.incr(12);
-      expect(ll.value()).to.be.equal(12);
-      ll.decr(2);
-      expect(ll.value()).to.be.equal(10);
+      var level1 = level(0,true);
+      expect(level1.value()).to.be.equal(0);
+      level1.incr(12);
+      expect(level1.value()).to.be.equal(12);
+      level1.decr(2);
+      expect(level1.value()).to.be.equal(10);
     });
     it('handles max precision 1e-2', function() {
-      var l0 = level(0.012345);
-      expect(l0.value()).to.be.equal(0.01);
+      var level0 = level(0.012345);
+      expect(level0.value()).to.be.equal(0.01);
       
-      var l1 = level();
-      expect(l1.value()).to.be.equal(0);
-      l1.incr(12.12345);
-      expect(l1.value()).to.be.equal(12.12);
-      l1.decr(2.0012345);
-      expect(l1.value()).to.be.equal(10.12);      
+      var level1 = level();
+      expect(level1.value()).to.be.equal(0);
+      level1.incr(12.12345);
+      expect(level1.value()).to.be.equal(12.12);
+      level1.decr(2.0012345);
+      expect(level1.value()).to.be.equal(10.12);      
+    });
+    it('handles negative increases and positive decreases', function() {
+      var level1 = level(20);
+      level1.incr(-12); 
+      expect(level1.value()).to.be.equal(8);
+      level1.decr(-12); 
+      expect(level1.value()).to.be.equal(20);
     });
     it('cannot go under 0', function() {
-      var ll = level(10); 
-      ll.decr(12); 
-      expect(ll.value()).to.be.equal(0);
+      var level1 = level(10);
+      level1.decr(12); 
+      expect(level1.value()).to.be.equal(0);
+
+      var level2 = level(10);
+      level2.incr(-12); 
+      expect(level2.value()).to.be.equal(0);
     });
+    it('always returns the actual delta', function() {
+      var level1 = level(0,true);
+      expect(level1.value()).to.be.equal(0);
+      
+      expect(level1.incr(12)).to.be.equal(12);
+      expect(level1.value()).to.be.equal(12);
+      expect(level1.decr(2)).to.be.equal(-2);
+      expect(level1.value()).to.be.equal(10);
+
+      expect(level1.incr(-2)).to.be.equal(-2);
+      expect(level1.value()).to.be.equal(8);
+      expect(level1.decr(-2)).to.be.equal(2);
+      expect(level1.value()).to.be.equal(10);
+      
+      expect(level1.decr(12)).to.be.equal(-10);
+      expect(level1.value()).to.be.equal(0);
+      });
   });
-  
+
   describe('volume', function() {
     it('has a base area and a level with precision 1e-2', function() {
-      var v0 = volume(1.0012345,level(1.0012345));
-      expect(v0.value()).to.be.equal(1);
-      var v1 = volume(1.0012345,level(1.012345));
-      expect(v1.value()).to.be.equal(1.01);
+      var volume0 = volume(1.0012345,level(1.0012345));
+      expect(volume0.value()).to.be.equal(1);
+      var volume1 = volume(1.0012345,level(1.012345));
+      expect(volume1.value()).to.be.equal(1.01);
       var v3 = volume(10.0012345,level(10.0012345));
       expect(v3.value()).to.be.equal(100);
     });
     it('can be increased and decreased by 0.01 (ten decimillis)', function() {
-      var l0 = level(1)
-      var v0 = volume(1, l0);
-      expect(v0.value()).to.be.equal(1);
-      v0.incr();
-      expect(v0.value()).to.be.equal(1.01);
-      expect(l0.value()).to.be.equal(1.01);
-      v0.decr();
-      expect(v0.value()).to.be.equal(1);
-      expect(l0.value()).to.be.equal(1);
-      v0.incr(0.01);
-      expect(v0.value()).to.be.equal(1.01);
-      expect(l0.value()).to.be.equal(1.01);
-      v0.decr(0.01);
-      expect(v0.value()).to.be.equal(1);
-      expect(l0.value()).to.be.equal(1);
-      v0.incr(0.006);
-      expect(v0.value()).to.be.equal(1.01);
-      expect(l0.value()).to.be.equal(1.01);
-      v0.decr(0.006);
-      expect(v0.value()).to.be.equal(1);
-      expect(l0.value()).to.be.equal(1);
-      v0.incr(0.004);
-      expect(v0.value()).to.be.equal(1);
-      expect(l0.value()).to.be.equal(1);
-      v0.decr(0.004);
-      expect(v0.value()).to.be.equal(1);
-      expect(l0.value()).to.be.equal(1);
+      var level0 = level(1)
+      var volume0 = volume(1, level0);
+      expect(volume0.value()).to.be.equal(1);
+      volume0.incr();
+      expect(volume0.value()).to.be.equal(1.01);
+      expect(level0.value()).to.be.equal(1.01);
+      volume0.decr();
+      expect(volume0.value()).to.be.equal(1);
+      expect(level0.value()).to.be.equal(1);
+      volume0.incr(0.01);
+      expect(volume0.value()).to.be.equal(1.01);
+      expect(level0.value()).to.be.equal(1.01);
+      volume0.decr(0.01);
+      expect(volume0.value()).to.be.equal(1);
+      expect(level0.value()).to.be.equal(1);
+      volume0.incr(0.006);
+      expect(volume0.value()).to.be.equal(1.01);
+      expect(level0.value()).to.be.equal(1.01);
+      volume0.decr(0.006);
+      expect(volume0.value()).to.be.equal(1);
+      expect(level0.value()).to.be.equal(1);
+      volume0.incr(0.004);
+      expect(volume0.value()).to.be.equal(1);
+      expect(level0.value()).to.be.equal(1);
+      volume0.decr(0.004);
+      expect(volume0.value()).to.be.equal(1);
+      expect(level0.value()).to.be.equal(1);
     });
     it('can be increased and decreased by n.nn (tens of decimillis)', function() {
-      var l0 = level(1)
-      var v0 = volume(1, l0);
-      expect(v0.value()).to.be.equal(1);
-      v0.incr(1.01);
-      expect(v0.value()).to.be.equal(2.01);
-      expect(l0.value()).to.be.equal(2.01);
-      v0.decr(1.01);
-      expect(v0.value()).to.be.equal(1);
-      expect(l0.value()).to.be.equal(1);
+      var level0 = level(1);
+      var volume0 = volume(1, level0);
+      expect(volume0.value()).to.be.equal(1);
+      volume0.incr(1.01);
+      expect(volume0.value()).to.be.equal(2.01);
+      expect(level0.value()).to.be.equal(2.01);
+      volume0.decr(1.01);
+      expect(volume0.value()).to.be.equal(1);
+      expect(level0.value()).to.be.equal(1);
 
-      var l1 = level(10)
-      var v1 = volume(10, l1);
-      expect(v1.value()).to.be.equal(100);
-      v1.incr(1.01);
-      expect(v1.value()).to.be.equal(101);
-      expect(l1.value()).to.be.equal(10.1);
-      v1.decr(1.01);
-      expect(v1.value()).to.be.equal(100);
-      expect(l1.value()).to.be.equal(10);
+      var level1 = level(10);
+      var volume1 = volume(10, level1);
+      expect(volume1.value()).to.be.equal(100);
+      volume1.incr(1.01);
+      expect(volume1.value()).to.be.equal(101);
+      expect(level1.value()).to.be.equal(10.1);
+      volume1.decr(1.01);
+      expect(volume1.value()).to.be.equal(100);
+      expect(level1.value()).to.be.equal(10);
 
-      var l2 = level(10.1)
-      var v2 = volume(10, l2);
-      expect(v2.value()).to.be.equal(101);
+      var level2 = level(10.1);
+      var volume2 = volume(10, level2);
+      expect(volume2.value()).to.be.equal(101);
     });
     it('can be increased/decreased through its level', function() {
-      var l1 = level(10)
-      var v1 = volume(10, l1);
-      l1.incr(1);
-      expect(v1.value()).to.be.equal(110);      
+      var level1 = level(10);
+      var volume1 = volume(10, level1);
+      level1.incr(1);
+      expect(volume1.value()).to.be.equal(110);      
     });
     it('cannot go under zero', function() {
-      var l1 = level(10)
-      var v1 = volume(10, l1);
-      v1.decr(102);
-      expect(v1.value()).to.be.equal(0);
-      l1.incr(1);
-      expect(v1.value()).to.be.equal(10);
-      l1.decr(2);
-      expect(v1.value()).to.be.equal(0);
+      var level1 = level(10);
+      var volume1 = volume(10, level1);
+      volume1.decr(102);
+      expect(volume1.value()).to.be.equal(0);
+      level1.incr(1);
+      expect(volume1.value()).to.be.equal(10);
+      level1.decr(2);
+      expect(volume1.value()).to.be.equal(0);
     });
+    it('always returns the actual volume delta', function() {
+      var level0 = level(1);
+      var volume0 = volume(1, level0);
+      expect(volume0.value()).to.be.equal(1);
+
+      expect(volume0.incr(1.01)).to.be.equal(1.01);
+      expect(volume0.value()).to.be.equal(2.01);
+      expect(level0.value()).to.be.equal(2.01);
+
+      expect(volume0.decr(1.01)).to.be.equal(-1.01);
+      expect(volume0.value()).to.be.equal(1);
+      expect(level0.value()).to.be.equal(1);
+
+      expect(volume0.decr(2)).to.be.equal(-1);
+      expect(volume0.value()).to.be.equal(0);
+      expect(level0.value()).to.be.equal(0);
+      });
     it('returns its area and level value when asked', function() {
       expect(volume(110, level(23)).area()).to.be.equal(110);      
       expect(volume(110, level(23)).levelValue()).to.be.equal(23);      
     });
   });
 
+  describe('flow', function() {
+    it('is a pump always on with a given flowRate', function() {
+      var level1 = level(10);
+      var volume1 = volume(10, level1);
+
+      var flow0 = flow(volume1, null, 10); // no sink, pulevel1 water
+      flow0.onTick();
+      expect(level1.value()).to.be.equal(9.9);
+    });
+    it.skip('carries liquid if there is', function() {
+      var level1 = level(0);
+      var volume1 = volume(10, level1);
+      var level2 = level(10)
+      var volume2 = volume(10, level2);
+
+      var flow0 = flow(volume1, volume2, 10); // bring water from volume1 into volume2
+      flow0.onTick();
+      expect(level2.value()).to.be.equal(10);
+    });
+    it.skip('is bidirectional', function() {
+      // TODO - implement me - check absolute value of the basin levels
+    });
+  });
+
   describe('sensor', function() {
     it('may go off when its level is > threshold', function() {
-      var l0 = level(5);
-      var s0 = sensorAbove(l0, 5);
-      expect(s0()).to.be.not.ok;
-      l0.incr();
-      expect(s0()).to.be.ok;
-      l0.decr();
-      expect(s0()).to.be.not.ok;
+      var level0 = level(5);
+      var sensor0 = sensorAbove(level0, 5);
+      expect(sensor0()).to.be.not.ok;
+      level0.incr();
+      expect(sensor0()).to.be.ok;
+      level0.decr();
+      expect(sensor0()).to.be.not.ok;
 
-      var s1 = sensor(l0, 5);
+      var s1 = sensor(level0, 5);
       expect(s1()).to.be.not.ok;
-      l0.incr();
+      level0.incr();
       expect(s1()).to.be.ok;
     });
     it('may go off when its level is < threshold', function() {
-      var l0 = level(5);
-      var s0 = sensorBelow(l0, 5);
-      expect(s0()).to.be.not.ok;
-      l0.decr();
-      expect(s0()).to.be.ok;
+      var level0 = level(5);
+      var sensor0 = sensorBelow(level0, 5);
+      expect(sensor0()).to.be.not.ok;
+      level0.decr();
+      expect(sensor0()).to.be.ok;
     });
     it('provides a getter for its threshold', function() {
-      var l0 = level(5);
-      var s0 = sensorBelow(l0, 6);
-      expect(s0.threshold()).to.be.equal(6);
+      var level0 = level(5);
+      var sensor0 = sensorBelow(level0, 6);
+      expect(sensor0.threshold()).to.be.equal(6);
     });  });
 
   describe('pump', function(){
     it('may be on or off depending on what its sensor senses', function() {
-      var l0 = level();
-      var v0 = volume(10, l0);
-      var s0 = sensor(l0)
-      var p0 = pump(v0, s0);
-      expect(p0.running()).to.be.not.ok;
+      var level0 = level();
+      var volume0 = volume(10, level0);
+      var sensor0 = sensor(level0)
+      var pump0 = pump(volume0, sensor0);
+      expect(pump0.running()).to.be.not.ok;
       
-      l0.incr();
-      expect(p0.running()).to.be.ok;
+      level0.incr();
+      expect(pump0.running()).to.be.ok;
     });
     // TODO - implement switch override outside the pump object
     it.skip('may be on or off depending on its switch override', function() {
-      var l0 = level(5);
-      var v0 = volume(10, l0);
-      var s0 = sensor(l0, 4);
-      var p0 = pump(v0, s0);
-      expect(p0.running()).to.be.ok;
-      p0.switch(true);
-      expect(p0.running()).to.be.ok;
+      var level0 = level(5);
+      var volume0 = volume(10, level0);
+      var sensor0 = sensor(level0, 4);
+      var pump0 = pump(volume0, sensor0);
+      expect(pump0.running()).to.be.ok;
+      pump0.switch(true);
+      expect(pump0.running()).to.be.ok;
 
-      p0.switch(false);
-      expect(p0.running()).to.be.not.ok;
+      pump0.switch(false);
+      expect(pump0.running()).to.be.not.ok;
     });
-    it('pumps IN the volume depending on its flow rate', function() {
-      var l0 = level(5.01);
-      var v0 = volume(10, l0);
-      var s0 = sensorAbove(l0, 5);
-      var p0 = pump(v0, s0, -1); // draining OUT
-      expect(v0.value()).to.be.equal(50.1);
-      expect(l0.value()).to.be.equal(5.01);
+    it('pumps OUT the volume depending on its flow rate', function() {
+      var level0 = level(5.01);
+      var volume0 = volume(10, level0);
+      var sensor0 = sensorAbove(level0, 5);
+      var pump0 = pump(volume0, sensor0, 1); // draining OUT
+      expect(volume0.value()).to.be.equal(50.1);
+      expect(level0.value()).to.be.equal(5.01);
 
-      p0.onTick(); // 1/10 s
-      expect(v0.value()).to.be.equal(50);
-      expect(l0.value()).to.be.equal(5);      
+      pump0.onTick(); // 1/10 s
+      expect(volume0.value()).to.be.equal(50);
+      expect(level0.value()).to.be.equal(5);      
 
-      p0.onTick(); // no longer running
-      expect(v0.value()).to.be.equal(50);
-      expect(l0.value()).to.be.equal(5);      
+      pump0.onTick(); // no longer running
+      expect(volume0.value()).to.be.equal(50);
+      expect(level0.value()).to.be.equal(5);      
     });
     it('is unidirectional, but it pumps both ways', function(){
-      var l0 = level(5);
-      var v0 = volume(10, l0);
-      var s0 = sensorBelow(l0, 6);
-      var p0 = pump(v0, s0, 1);
+      var level0 = level(5);
+      var volume0 = volume(10, level0);
+      var sensor0 = sensorBelow(level0, 6);
+      var pump0 = pump(volume0, sensor0, -1);
 
-      p0.onTick(); // 1/10 s
-      expect(v0.value()).to.be.equal(50.1);
-      expect(l0.value()).to.be.equal(5.01);
+      pump0.onTick(); // 1/10 s
+      expect(volume0.value()).to.be.equal(50.1);
+      expect(level0.value()).to.be.equal(5.01);
+    });
+    it.skip('pumps away only available water', function(){
+      var level0 = level(0.9);
+      var volume0 = volume(10, level0);
+      var level1 = level(0);
+      var volume1 = volume(10, level1);
+      var sensor0 = sensorBelow(level0, 6);
+      var pump0 = pump(volume0, sensor0, 100, volume1);
+
+      pump0.onTick(); // 1/10 s
+      expect(volume0.value()).to.be.equal(0);
+      expect(level0.value()).to.be.equal(0);
+      expect(volume1.value()).to.be.equal(0.9);
+      expect(level1.value()).to.be.equal(0.9);
     });
   });
 
