@@ -33,7 +33,7 @@ module.exports = function(grunt){
         timeout: 1000,
         ignoreLeaks: false,
         ui: 'bdd',
-        reporter: 'tap'
+        reporter: 'spec'  // was 'tap'
       },
       all: { src: 'spec/**/*.js' }
     },
