@@ -5,6 +5,7 @@ var COMPONENTS = (function () {
   function level(start) {
     var _level = centify(start) || 0;
     var handleDelta = function(operator, val) {
+      if (typeof val === 'undefined') throw 'must specify level increase/decrease value';
       var result = _level;
       _level = operator(_level, centify(val) || 1);
       reset();
@@ -90,8 +91,8 @@ var COMPONENTS = (function () {
       },
       onTick : function() { 
         if (this.running()) {
-          source.decr(flowRate/10);
-          if (sink) sink.incr(flowRate/10);
+          var volume = -source.decr(flowRate/10);
+          if (sink && volume !== 0) sink.incr(volume);
         }
       }
     };
@@ -99,7 +100,6 @@ var COMPONENTS = (function () {
   }
 
   function flow(source, sink, flowRate) {
-    // TODO - implement me, I am a pump always on
     return pump(source, function() { return true; }, flowRate, sink);
   }
 

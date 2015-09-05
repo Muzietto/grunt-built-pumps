@@ -30,16 +30,13 @@ describe('component', function() {
       var level2 = level(123);
       expect(level2.value()).to.be.equal(123);
     });
-    it('can be increased or decreased by 0.01', function() {
-      var level1 = level();
-      expect(level1.value()).to.be.equal(0);
-      level1.incr();
-      expect(level1.value()).to.be.equal(0.01);
-      level1.decr();
-      expect(level1.value()).to.be.equal(0);
+    it('expects values to incr and decr to be always specified', function() {
+      var level0 = level();
+      expect(level0.incr.bind(level0, undefined)).to.throw;
+      expect(level0.decr.bind(level0, undefined)).to.throw;
     });
     it('can be increased or decreased by n', function() {
-      var level1 = level(0,true);
+      var level1 = level(0);
       expect(level1.value()).to.be.equal(0);
       level1.incr(12);
       expect(level1.value()).to.be.equal(12);
@@ -74,7 +71,7 @@ describe('component', function() {
       expect(level2.value()).to.be.equal(0);
     });
     it('always returns the actual delta', function() {
-      var level1 = level(0,true);
+      var level1 = level(0);
       expect(level1.value()).to.be.equal(0);
       
       expect(level1.incr(12)).to.be.equal(12);
@@ -194,50 +191,26 @@ describe('component', function() {
     });
   });
 
-  describe('flow', function() {
-    it('is a pump always on with a given flowRate', function() {
-      var level1 = level(10);
-      var volume1 = volume(10, level1);
-
-      var flow0 = flow(volume1, null, 10); // no sink, pulevel1 water
-      flow0.onTick();
-      expect(level1.value()).to.be.equal(9.9);
-    });
-    it.skip('carries liquid if there is', function() {
-      var level1 = level(0);
-      var volume1 = volume(10, level1);
-      var level2 = level(10)
-      var volume2 = volume(10, level2);
-
-      var flow0 = flow(volume1, volume2, 10); // bring water from volume1 into volume2
-      flow0.onTick();
-      expect(level2.value()).to.be.equal(10);
-    });
-    it.skip('is bidirectional', function() {
-      // TODO - implement me - check absolute value of the basin levels
-    });
-  });
-
   describe('sensor', function() {
     it('may go off when its level is > threshold', function() {
       var level0 = level(5);
       var sensor0 = sensorAbove(level0, 5);
       expect(sensor0()).to.be.not.ok;
-      level0.incr();
+      level0.incr(0.01);
       expect(sensor0()).to.be.ok;
-      level0.decr();
+      level0.decr(0.01);
       expect(sensor0()).to.be.not.ok;
 
       var s1 = sensor(level0, 5);
       expect(s1()).to.be.not.ok;
-      level0.incr();
+      level0.incr(0.01);
       expect(s1()).to.be.ok;
     });
     it('may go off when its level is < threshold', function() {
       var level0 = level(5);
       var sensor0 = sensorBelow(level0, 5);
       expect(sensor0()).to.be.not.ok;
-      level0.decr();
+      level0.decr(0.01);
       expect(sensor0()).to.be.ok;
     });
     it('provides a getter for its threshold', function() {
@@ -254,21 +227,8 @@ describe('component', function() {
       var pump0 = pump(volume0, sensor0);
       expect(pump0.running()).to.be.not.ok;
       
-      level0.incr();
+      level0.incr(0.01);
       expect(pump0.running()).to.be.ok;
-    });
-    // TODO - implement switch override outside the pump object
-    it.skip('may be on or off depending on its switch override', function() {
-      var level0 = level(5);
-      var volume0 = volume(10, level0);
-      var sensor0 = sensor(level0, 4);
-      var pump0 = pump(volume0, sensor0);
-      expect(pump0.running()).to.be.ok;
-      pump0.switch(true);
-      expect(pump0.running()).to.be.ok;
-
-      pump0.switch(false);
-      expect(pump0.running()).to.be.not.ok;
     });
     it('pumps OUT the volume depending on its flow rate', function() {
       var level0 = level(5.01);
@@ -296,22 +256,58 @@ describe('component', function() {
       expect(volume0.value()).to.be.equal(50.1);
       expect(level0.value()).to.be.equal(5.01);
     });
-    it.skip('pumps away only available water', function(){
+    it('pumps away only available water', function(){
       var level0 = level(0.9);
       var volume0 = volume(10, level0);
+      var sensor0 = sensorBelow(level0, 6);
       var level1 = level(0);
       var volume1 = volume(10, level1);
-      var sensor0 = sensorBelow(level0, 6);
+      // could pump more water than volume0 contains
       var pump0 = pump(volume0, sensor0, 100, volume1);
+
+      expect(volume0.value()).to.be.equal(9);
+      expect(level0.value()).to.be.equal(0.9);
+      expect(volume1.value()).to.be.equal(0);
+      expect(level1.value()).to.be.equal(0);
 
       pump0.onTick(); // 1/10 s
       expect(volume0.value()).to.be.equal(0);
       expect(level0.value()).to.be.equal(0);
-      expect(volume1.value()).to.be.equal(0.9);
+      expect(volume1.value()).to.be.equal(9);
       expect(level1.value()).to.be.equal(0.9);
     });
   });
 
-  
-  
+  describe('flow', function() {
+    it('is a pump always on with a given flowRate', function() {
+      var level1 = level(10);
+      var volume1 = volume(10, level1);
+
+      var flow0 = flow(volume1, null, 10); // no sink, pulevel1 water
+      flow0.onTick();
+      expect(level1.value()).to.be.equal(9.9);
+    });
+    it('carries liquid as much as there is', function() {
+      var level1 = level(9);
+      var volume1 = volume(1, level1);
+      var level2 = level(10);
+      var volume2 = volume(1, level2);
+      var flow0 = flow(volume1, volume2, 1000); // bring water from volume1 into volume2
+
+      flow0.onTick();
+      expect(level1.value()).to.be.equal(0);
+      expect(volume1.value()).to.be.equal(0);
+      expect(level2.value()).to.be.equal(19);
+      expect(volume2.value()).to.be.equal(19);
+      expect(volume2.levelValue()).to.be.equal(19);
+
+      flow0.onTick();
+      expect(level2.value()).to.be.equal(19);
+      expect(volume2.levelValue()).to.be.equal(19);
+      expect(volume2.value()).to.be.equal(19);
+    });
+    it.skip('is bidirectional', function() {
+      // TODO - implement me - check absolute value of the basin levels
+    });
+  });
 }); // end tests
