@@ -1,27 +1,20 @@
 
-var levello = COMPONENTS.level(25);
-var zenzor = COMPONENTS.sensorAbove(levello, 10);
-var firstProbeEver = WIDGETS.liquidProbe(zenzor).init($('#parentDiv2'),20,5).paint();
-var zenzor2 = COMPONENTS.sensorAbove(levello, 30);
-var secondProbeEver = WIDGETS.liquidProbe(zenzor2).init($('#parentDiv2'),30,40).paint();
+var evlevelUp = WIDGETS.eventedLevel(35);
+var sensorUp = COMPONENTS.sensorBelow(evlevelUp, 30);
+var volumeUp = COMPONENTS.volume(25000, evlevelUp);
+var evBasinUp = WIDGETS.eventedBasin(volumeUp, $('#parentDiv2'), {left:60,bottom:100}).paint();
+var probeUp = WIDGETS.positionalProbe(sensorUp, evBasinUp.domNode(), 10).paint();
 
-var evlevello = WIDGETS.eventedLevel(35);
-var thirdProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorAbove(evlevello, 46), $('#parentDiv2'), 75).paint();
-var fourthProbeEver = WIDGETS.positionalProbe(COMPONENTS.sensorBelow(evlevello, 30), $('#parentDiv2'), 110).paint();
+var evlevelDown = WIDGETS.eventedLevel(35);
+var sensorDown = COMPONENTS.sensorAbove(evlevelDown, 37);
+var volumeDown = COMPONENTS.volume(25000, evlevelDown);
+var evBasinDown = WIDGETS.eventedBasin(volumeDown, $('#parentDiv2'), {left:220,bottom:0}).paint();
+var probeDown = WIDGETS.positionalProbe(sensorDown, evBasinDown.domNode(), 120).paint();
 
-var volumello = COMPONENTS.volume(25000, evlevello);
-var basinello = WIDGETS.eventedBasin(volumello, $('#parentDiv2'), 220).paint();
-
-var zenzorAbofe = COMPONENTS.sensorAbove(evlevello, 37);
-var zenzorBelofe = COMPONENTS.sensorBelow(evlevello, 30);
-
-var topBasinello = WIDGETS.positionalProbe(zenzorAbofe, basinello.domNode(), 10).paint();
-var bottomBasinello = WIDGETS.positionalProbe(zenzorBelofe, basinello.domNode(), 120).paint();
-
-// removes water from basin
-var pumpelloOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumello, zenzorAbofe, 1500)).init($('#parentDiv2'), 57, 180, 'right').paint();
-// adds water to basin
-var pumpelloIn = WIDGETS.pumpWidget(COMPONENTS.pump(volumello, zenzorBelofe, -1500)).init($('#parentDiv2'), 43, 390, 'left').paint();
+// adds water to upper basin
+var pumpIn = WIDGETS.pumpWidget(COMPONENTS.pump(volumeUp, sensorUp, -1500)).init($('#parentDiv2'), 43, 390, 'right').paint();
+// removes water from lower basin
+var pumpOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumeDown, sensorDown, 1500)).init($('#parentDiv2'), 57, 180, 'left').paint();
 
 var directorId = setInterval(function() {
   pumpelloIn.onTick();
