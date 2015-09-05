@@ -36,7 +36,7 @@ var WIDGETS = function(eventer, components) {
   function liquidProbe(sensor, template) {
     var _$widget = $(''), _$parent, _pos;
     return result();
-    
+
     function result() {
       return {
         init: function($parent, pos) {
