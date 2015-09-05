@@ -27,22 +27,21 @@ var WIDGETS = function(eventer, components) {
   // sensor threshold defines vertical position
   // sensor must be based on an eventedLevel
   function positionalProbe(sensor, $parent, left, template) {
-    var widget = eventer(liquidProbe(sensor, template).init($parent, sensor.threshold() - 15, left));
+    var widget = eventer(liquidProbe(sensor, template).init($parent, {bottom:sensor.threshold()-15, left:left}));
     widget.on('level_change', function() { widget.repaint(); });
     return widget;
   }
 
   // extremely unhandy (vertical position independent from sensor threshold)
   function liquidProbe(sensor, template) {
-    var _$widget = $(''), _$parent, _bottom, _left;
+    var _$widget = $(''), _$parent, _pos;
     return result();
     
     function result() {
       return {
-        init: function($parent, bottom, left) {
+        init: function($parent, pos) {
           _$parent = $parent;
-          _bottom = bottom;
-          _left = left;
+          _pos = pos;
           return this;
         },
         paint: function() {
@@ -62,10 +61,13 @@ var WIDGETS = function(eventer, components) {
     }
 
     function $widget() {
-      return $(markup())
-        .css({'bottom' : _bottom,
-              'left' : _left,
-              'z-index': 99});
+      var style = {};
+      if (_pos.top) style.top = _pos.top;
+      if (_pos.left) style.left = _pos.left;
+      if (_pos.bottom) style.bottom = _pos.bottom;
+      if (_pos.right) style.right = _pos.right;
+      style['z-index'] = 99;
+      return $(markup()).css(style);
     }
     
     function stdTemplate() {
@@ -84,7 +86,7 @@ var WIDGETS = function(eventer, components) {
   }
 
   function pumpWidget(pump, template) {
-    var _$widget = $(''), _$parent, _bottom, _left, _orientation;
+    var _$widget = $(''), _$parent, _pos, _orientation;
     var product = eventer(result());
     product.on('level_change', product.repaint);
     
@@ -92,10 +94,9 @@ var WIDGETS = function(eventer, components) {
     
     function result() {
       return {
-        init: function($parent, bottom, left, orientation) {
+        init: function($parent, pos, orientation) {
           _$parent = $parent;
-          _bottom = bottom;
-          _left = left;
+          _pos = pos;
           _orientation = orientation;
           return this;
         },
@@ -120,10 +121,13 @@ var WIDGETS = function(eventer, components) {
     }
 
     function $widget() {
-      return $(markup())
-        .css({'bottom' : _bottom,
-              'left' : _left,
-              'z-index': 49});
+      var style = {};
+      if (_pos.top) style.top = _pos.top;
+      if (_pos.left) style.left = _pos.left;
+      if (_pos.bottom) style.bottom = _pos.bottom;
+      if (_pos.right) style.right = _pos.right;
+      style['z-index'] = 49;
+      return $(markup()).css(style);
     }
     
     function stdTemplate() {
@@ -139,12 +143,11 @@ var WIDGETS = function(eventer, components) {
     function bkgColor() {
       return pump.running() ? 'green' : 'red';
     }
-    
   }
 
   // evented widget
-  function eventedBasin(volume, $parent, left, template) {
-    var widget = eventer(basin(volume, undefined, template).init($parent, 0, left));
+  function eventedBasin(volume, $parent, pos, template) {
+    var widget = eventer(basin(volume, undefined, template).init($parent, pos.bottom||0, pos.left||0));
     widget.on('level_change', function() { widget.repaint(); });
     return widget;
   }
