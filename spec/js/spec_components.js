@@ -15,7 +15,6 @@ var sensor = components.sensor;
 var sensorAbove = components.sensorAbove;
 var sensorBelow = components.sensorBelow;
 var pump = components.pump;
-var flow = components.flow;
 
 describe('component', function() {
   before(function(){ });
@@ -146,23 +145,6 @@ describe('component', function() {
     it('returns its area and level value when asked', function() {
       expect(volume(110, level(23)).area()).to.be.equal(110);      
       expect(volume(110, level(23)).levelValue()).to.be.equal(23);      
-    });
-  });
-  
-  describe('flow', function() {
-    it('is a unidirectional connection from a source to a sink',function() {
-      var lev1 = level(10)
-      var sink = volume(10, lev1);
-      var flo1 = flow(sink);
-      expect(flo1.carry.bind(flo1, 10)).to.not.throw();
-      expect(flo1.carry.bind(flo1, -10)).to.throw();
-    });
-    it('carries uncompressible liquid, with zero-sum balance', function() {
-      var lev1 = level(10)
-      var sink = volume(10, lev1);
-      var flo1 = flow(sink);
-      flo1.carry(10);
-      expect(lev1.value()).to.be.equal(11);      
     });
   });
 

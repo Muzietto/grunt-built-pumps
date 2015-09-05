@@ -85,26 +85,16 @@ var COMPONENTS = (function () {
       onTick : function() {
         if (this.running()) {
           source.incr(flowRate/10);
-          if (sink) sink.carry(flowRate/10);
+          if (sink) sink.decr(flowRate/10);
         }
       }
     };
     return result;
   }
-  
-  function flow(sink) {
-    return {
-      carry : function(volume) {
-        if (volume < 0) throw 'flow is unidirectional';
-        sink.incr(volume);
-      }
-    };
-  }
 
   return {
     level: level,
     volume: volume,
-    flow: flow,
     sensor: sensorAbove(),
     sensorAbove: sensorAbove(),
     sensorBelow: sensorBelow(),
