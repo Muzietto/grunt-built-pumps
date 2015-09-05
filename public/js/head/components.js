@@ -76,15 +76,15 @@ var COMPONENTS = (function () {
     };
   }
 
-  // flowRate > 0 ==> remove water
-  function pump(volume, sensor, flowRate, sink) {
+  // flowRate > 0 ==> add water
+  function pump(source, sensor, flowRate, sink) {
     var result = {
       running : function() {
         return sensor();
       },
       onTick : function() {
         if (this.running()) {
-          volume.decr(flowRate/10);
+          source.incr(flowRate/10);
           if (sink) sink.carry(flowRate/10);
         }
       }

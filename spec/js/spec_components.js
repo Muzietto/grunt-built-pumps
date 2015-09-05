@@ -222,7 +222,7 @@ describe('component', function() {
       var l0 = level(5.01);
       var v0 = volume(10, l0);
       var s0 = sensorAbove(l0, 5);
-      var p0 = pump(v0, s0, 1);
+      var p0 = pump(v0, s0, -1); // draining OUT
       expect(v0.value()).to.be.equal(50.1);
       expect(l0.value()).to.be.equal(5.01);
 
@@ -238,7 +238,7 @@ describe('component', function() {
       var l0 = level(5);
       var v0 = volume(10, l0);
       var s0 = sensorBelow(l0, 6);
-      var p0 = pump(v0, s0, -1);
+      var p0 = pump(v0, s0, 1);
 
       p0.onTick(); // 1/10 s
       expect(v0.value()).to.be.equal(50.1);

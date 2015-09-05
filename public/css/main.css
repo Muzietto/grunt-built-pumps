@@ -51,3 +51,5 @@ div.circular div.sensor_threshold {
   border-bottom: 15px solid transparent; 
   border-right:  26px solid #000000; 
 }
+
+pre {display:inline;margin:0px 2px;}
