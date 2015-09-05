@@ -32,8 +32,8 @@ describe('component', function() {
     });
     it('expects values to incr and decr to be always specified', function() {
       var level0 = level();
-      expect(level0.incr.bind(level0, undefined)).to.throw;
-      expect(level0.decr.bind(level0, undefined)).to.throw;
+      expect(level0.incr.bind(level0, undefined)).to.throw();
+      expect(level0.decr.bind(level0, undefined)).to.throw();
     });
     it('can be increased or decreased by n', function() {
       var level1 = level(0);
@@ -98,16 +98,17 @@ describe('component', function() {
       var v3 = volume(10.0012345,level(10.0012345));
       expect(v3.value()).to.be.equal(100);
     });
+    it('expects values to incr and decr to be always specified', function() {
+      var level0 = level(1)
+      var volume0 = volume(1, level0);
+      expect(volume0.value()).to.be.equal(1);
+      expect(volume0.incr.bind(volume0, undefined)).to.throw();
+      expect(volume0.decr.bind(volume0, undefined)).to.throw();
+    });
     it('can be increased and decreased by 0.01 (ten decimillis)', function() {
       var level0 = level(1)
       var volume0 = volume(1, level0);
       expect(volume0.value()).to.be.equal(1);
-      volume0.incr();
-      expect(volume0.value()).to.be.equal(1.01);
-      expect(level0.value()).to.be.equal(1.01);
-      volume0.decr();
-      expect(volume0.value()).to.be.equal(1);
-      expect(level0.value()).to.be.equal(1);
       volume0.incr(0.01);
       expect(volume0.value()).to.be.equal(1.01);
       expect(level0.value()).to.be.equal(1.01);
