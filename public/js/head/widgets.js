@@ -14,12 +14,14 @@ var WIDGETS = function(eventer, components) {
     return {
       value : _level.value,
       incr : function(val) {
-        _level.incr(val);
+        var result = _level.incr(val);
         _level.trigger('level_change', val);
+        return result;
       },
       decr : function(val) {
-        _level.decr(val);
+        var result = _level.decr(val);
         _level.trigger('level_change', (0 - val));
+        return result;
       }
     };
   }
