@@ -85,6 +85,62 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
+  function pipe(flow, incline, template) {
+    var _$widget = $(''), _$parent, _pos;
+    var widget = eventer(result());
+    widget.on('level_change', function() { widget.repaint(); });
+    return widget;
+
+    function result() {
+      return {
+        init: function($parent, pos) {
+          _$parent = $parent;
+          _pos = pos;
+          return this;
+        },
+        paint: function() {
+          _$widget = $widget();
+          _$widget.appendTo(_$parent);
+          return this;
+        },
+        repaint: function() {
+          $('.pipe', _$widget).removeClass('running')
+                              .removeClass('not_running')
+                              .addClass(isRunning());
+          return this;
+        }
+      };
+    }
+
+    function markup() {
+      return (template) ? template.process(pipe) : stdTemplate();
+    }
+
+    function $widget() {
+      var style = {};
+      if (_pos.top) style.top = _pos.top;
+      if (_pos.left) style.left = _pos.left;
+      if (_pos.bottom) style.bottom = _pos.bottom;
+      if (_pos.right) style.right = _pos.right;
+      style.width = _pos.width || 100;
+      style.height = _pos.height || 50;      
+      style['z-index'] = 99;
+      return $(markup()).css(style);
+    }
+
+    function stdTemplate() {
+      return '' +
+        '<div class="widget_container absolute" id="">' +
+        '  <span class="pipe">' + flow.flowRate() + '</span>' +
+        '  <div class="pipe diagonal_line ' + incline + ' ' + isRunning() + '"></div>' +
+        '</div>';
+    }
+
+    function isRunning() {
+      return (flow.running()) ? 'running' : 'not_running';
+    }
+  }
+
   function pumpWidget(pump, template) {
     var _$widget = $(''), _$parent, _pos, _orientation;
     var product = eventer(result());
@@ -106,7 +162,7 @@ var WIDGETS = function(eventer, components) {
           return this;
         },
         repaint: function() {
-          $('.pump_widget', _$widget).css('background-color', bkgColor());
+          $('.pump_widget.circular', _$widget).css('background-color', bkgColor());
           return this;
         },
         onTick: function() {
@@ -134,6 +190,7 @@ var WIDGETS = function(eventer, components) {
       var bkg = 'style="background-color:' + bkgColor() + '"';
       return '' +
         '<div class="widget_container absolute" id="">' +
+        '  <span class="pump_widget flow_rate">' + pump.flowRate() + '</span>' +
         '  <div class="pump_widget circular absolute" ' + bkg + '>' +
         '    <div class="arrow-' + _orientation + '"></div>' +
         '  </div>' +
@@ -152,11 +209,12 @@ var WIDGETS = function(eventer, components) {
     return widget;
   }
 
+  // dimensions are in pixels
   function basin(volume, dimensions, template) {
     var _$widget = $(''), _$parent, _bottom, _left;
     dimensions = dimensions || {
       width : Math.round(Math.sqrt(volume.area())),
-      height : Math.round(volume.levelValue() * 1.5),
+      height : 80,
       scale : 1 // volume_level/pixels
     };
     return result();
@@ -175,7 +233,8 @@ var WIDGETS = function(eventer, components) {
           return this;
         },
         repaint: function() {
-          $('.basin.inner', _$widget).css('height', volumeHeight());
+          $('.basin.inner', _$widget).css('height', Math.ceil(volumeHeight()));
+          $('.basin.outer span.basin_level', _$widget).text(Math.ceil(volumeHeight()));
           return this;
         },
         domNode: function() {
@@ -197,10 +256,11 @@ var WIDGETS = function(eventer, components) {
     function stdTemplate() {
       var basinDims = 'width:' + dimensions.width / dimensions.scale + 'px;' +
                       'height:' + dimensions.height / dimensions.scale + 'px;';
-      var volumeDims = 'width:100%;height:' + volumeHeight() + 'px;';
+      var volumeDims = 'width:100%;height:' + Math.ceil(volumeHeight()) + 'px;';
       return '' +
         '<div class="widget_container absolute" id="">' +
         '  <div class="basin outer" style="background-color:lightcoral;border:1px solid black;'+ basinDims +'">' +
+        '    <span class="basin_level">'+ volumeHeight() +'</span>' +
         '    <div class="basin inner absolute" id="" style="background-color:white;bottom:0px;left:0px;'+ volumeDims +'"></div>' +
         '  </div>' +
         '</div>';
@@ -217,6 +277,7 @@ var WIDGETS = function(eventer, components) {
     positionalProbe : positionalProbe,
     eventedBasin : eventedBasin,
     pumpWidget : pumpWidget,
+    pipe : pipe,
     liquidProbe : liquidProbe,
     basin : basin
   };  

@@ -90,6 +90,9 @@ var COMPONENTS = (function () {
       running : function() {
         return sensor();
       },
+      flowRate : function() {
+        return flowRate;
+      },
       onTick : function() { 
         if (this.running()) {
           var volume = -source.decr(flowRate/10);
@@ -101,7 +104,15 @@ var COMPONENTS = (function () {
   }
 
   function flow(source, sink, flowRate) {
-    return pump(source, function() { return true; }, flowRate, sink);
+    var _ON = true, _OFF = false,
+    _onOff = _ON,
+    faucet = function() { return _onOff; };
+
+    var result = pump(source, faucet, flowRate, sink);
+    result.switchOn = function() { _onOff = _ON; };
+    result.switchOff = function() { _onOff = _OFF; };
+
+    return result;
   }
 
   return {

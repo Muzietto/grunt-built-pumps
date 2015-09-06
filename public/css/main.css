@@ -25,6 +25,19 @@ div.circular div.sensor_threshold {
   margin-left: 7px;
 }
 
+.pump_widget.flow_rate {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  text-align: center;
+}
+
+.basin.outer span.basin_level {
+  position: absolute;
+  top: 0px;
+  right: 2px;
+}
+
 .arrow-up {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
@@ -55,12 +68,25 @@ div.circular div.sensor_threshold {
 .diagonal_line {
   position: relative;
   background-size:100% 100%;
+  height: 100%;
+  width: 100%;
 }
-.diagonal_line.positive {
-    background-image:url(../img/plus45.png);
+.diagonal_line.positive.running {
+    background-image: url(../img/plus45_on.png);
 }
-.diagonal_line.negative {
-    background-image:url(../img/minus45.png);
+.diagonal_line.positive.not_running {
+    background-image: url(../img/plus45_off.png);
+}
+.diagonal_line.negative.running {
+    background-image: url(../img/minus45_on.png);
+}
+.diagonal_line.negative.not_running {
+    background-image: url(../img/minus45_off.png);
+}
+span.pipe {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
 }
 
 pre {display:inline;margin:0px 2px;}

@@ -280,11 +280,23 @@ describe('component', function() {
   });
 
   describe('flow', function() {
-    it('is a pump always on with a given flowRate', function() {
+    it('is a pump initially on with a given flowRate', function() {
       var level1 = level(10);
       var volume1 = volume(10, level1);
 
-      var flow0 = flow(volume1, null, 10); // no sink, pulevel1 water
+      var flow0 = flow(volume1, null, 10); // no sink, pull water
+      flow0.onTick();
+      expect(level1.value()).to.be.equal(9.9);
+    });
+    it('may be turned off and on at will', function() {
+      var level1 = level(10);
+      var volume1 = volume(10, level1);
+
+      var flow0 = flow(volume1, null, 10); // no sink, pull water
+      flow0.switchOff();
+      flow0.onTick();
+      expect(level1.value()).to.be.equal(10);
+      flow0.switchOn();
       flow0.onTick();
       expect(level1.value()).to.be.equal(9.9);
     });
