@@ -22,10 +22,13 @@
     <body> 
         <h1 style="margin-left:20px;">grunt-built-pumps sample_02</h1>
         <div class="horizon relative" id="parentDiv2">
+        <button id="offButton" style="position:absolute;bottom:35px;left:0px;width:140px;margin:5px;padding:5px;">flowConn.switchOff()</button>
+        <button id="onButton" style="position:absolute;bottom:0px;left:0px;width:140px;margin:5px;padding:5px;">flowConn.switchOn()</button>
         </div>
-        <h5>Among the objects in this page <pre style="display:inline;margin:0px 7px;">var evlevello</pre> represents the level of the white liquid in the basin. Its API allows to manipulate its <pre>value()</pre></h5>
-        <h5>Type <pre style="display:inline;margin:0px 7px;">evlevello.incr(20)</pre> in the console and watch the pump on the left restore automatically an acceptable water level.</h5>
-        <h5>Type <pre style="display:inline;margin:0px 7px;">evlevello.decr(20)</pre> in the console and watch the pump on the right restore automatically an acceptable water level.</h5>
+        <h5>Among the objects in this page <pre>var flowConn</pre> represents the flow of liquid inside the diagonal pipe. Its API allows to turn it off and on using respectively <pre>switchOff()</pre> and <pre>switchOn()</pre></h5>
+        <h5>Click the <pre>flowConn.switchOff()</pre> button and watch the pump on the left restore automatically an acceptable water level (if the left sensor says it's necessary).</h5>
+        <h5>Click the <pre>flowConn.swithOn()</pre> button and the pipe will start again draining water from the left basin.</h5>
+        <h5>The pump on the right starts if there is too much water in the central basin and carries it in the rightmost one.</h5>
 
         <!-- build:js inline ../../build/temp/endbody.min.js -->
         <script type="text/javascript" src="../js/endbody/document_ready2.js"></script>
