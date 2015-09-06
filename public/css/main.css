@@ -52,4 +52,15 @@ div.circular div.sensor_threshold {
   border-right:  26px solid #000000; 
 }
 
+.diagonal_line {
+  position: relative;
+  background-size:100% 100%;
+}
+.diagonal_line.positive {
+    background-image:url(../img/plus45.png);
+}
+.diagonal_line.negative {
+    background-image:url(../img/minus45.png);
+}
+
 pre {display:inline;margin:0px 2px;}

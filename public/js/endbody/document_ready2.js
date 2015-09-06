@@ -17,9 +17,10 @@ var pumpIn = WIDGETS.pumpWidget(COMPONENTS.pump(volumeUp, sensorUp, -4500)).init
 var pumpOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumeDown, sensorDown, 500)).init($('#parentDiv2'), {bottom:43,left:390}, 'right').paint();
 // connects the two basins
 var flowConn = COMPONENTS.flow(volumeUp, volumeDown, 4000);
-
+/*
 var directorId = setInterval(function() {
   pumpIn.onTick();
   pumpOut.onTick();
   flowConn.onTick();
 }, 1);
+*/
