@@ -32,10 +32,13 @@ div.circular div.sensor_threshold {
   text-align: center;
 }
 
+.basin.inner { margin: 1px; }
+
 .basin.outer span.basin_level {
   position: absolute;
   top: 0px;
   right: 2px;
+  z-index:5;
 }
 
 .arrow-up {
