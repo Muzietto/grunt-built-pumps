@@ -18,13 +18,25 @@ var pump = components.pump;
 
 describe('widget', function() {
   before(function(){
+    /*
+    var myWindow = require('jsdom').jsdom('<html><head></head><body><div id="mubiParent"></div></body></html>',{url:'http://www.example.com'}).parentWindow;
+    global.window = myWindow;
+    global.$ = jquery(myWindow);
+
+    this.app = { _: function(slug) { return slug + '_decoded_with_SHORT_URL'; } };
+    this.client = { app: this.app };
+
+    this.$parent =  $('#mubiParent');
+    this.mubi = new MultipleBilling(this.client, this.$parent);
+    */
   });
   after(function(){
+    //global.window = undefined;
   });
   beforeEach(function(){ });
   afterEach(function(){ });
 
-  describe('widget liquidProbe', function() {
+  describe('liquidProbe', function() {
     it('gets created with a sensor and a circular template containing a display of the threshold', function() {
 
     });
@@ -45,7 +57,7 @@ describe('widget', function() {
     });
   });
 
-  describe('widget pipe', function() {
+  describe('pipe', function() {
     it('gets created with a flow and an incline', function() {
 
     });
@@ -62,7 +74,7 @@ describe('widget', function() {
     });
   });
 
-  describe('widget basin', function() {
+  describe('basin', function() {
     it('gets created with a volume, a scale volume_level/pixels and a rectangular template containing a display of the level', function() {
 
     });
@@ -83,7 +95,7 @@ describe('widget', function() {
     });
   });
 
-  describe('widget pumpWidget', function() {
+  describe('pumpWidget', function() {
     it('gets created with ...', function() {
 
     });
@@ -96,7 +108,7 @@ describe('widget', function() {
       });
     });
   });
-  describe('widget eventedPumpWidget (not yet existing)',function(){
+  describe('eventedPumpWidget (not yet existing)',function(){
     it.skip('binds the pump onTick to a global tick event', function() {});
   });
 
