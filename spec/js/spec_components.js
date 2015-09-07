@@ -15,6 +15,7 @@ var sensor = components.sensor;
 var sensorAbove = components.sensorAbove;
 var sensorBelow = components.sensorBelow;
 var pump = components.pump;
+var bidirectionalPump = components.bidirectionalPump;
 var flow = components.flow;
 
 describe('component', function() {
@@ -279,6 +280,94 @@ describe('component', function() {
     });
   });
 
+  describe('bidirectionalPump', function(){
+    it('consists in two pumps with equal flowRate, commanded by two sensors', function() {
+      var level0 = level(5);
+      var volume0 = volume(10, level0);
+      var sensorAbove0 = sensorAbove(level0, 6);
+      var sensorBelow0 = sensorBelow(level0, 4);
+      var bidirPump0 = bidirectionalPump(volume0, sensorAbove0, sensorBelow0, 1);
+
+      expect(bidirPump0.running()).to.be.not.ok;
+      level0.incr(2);
+      expect(bidirPump0.running()).to.be.ok;
+      level0.decr(2);
+      expect(bidirPump0.running()).to.be.not.ok;
+      level0.decr(2);
+      expect(bidirPump0.running()).to.be.ok;
+    });
+    it('pumps water from a source by watching its own sensorBelow', function() {
+      var level0 = level(5);
+      var volume0 = volume(10, level0);
+      var level1 = level(5);
+      var volume1 = volume(10, level1);
+      var sensorAbove0 = sensorAbove(level0, 6);
+      var sensorBelow0 = sensorBelow(level0, 4);
+      var bidirPump0 = bidirectionalPump(volume0, sensorAbove0, sensorBelow0, 1, volume1);
+
+      level0.decr(2);
+      expect(level0.value()).to.be.equal(3);
+      expect(level1.value()).to.be.equal(5);
+      bidirPump0.onTick();
+      expect(level0.value()).to.be.equal(3.01);
+      expect(level1.value()).to.be.equal(4.99);
+    });
+    it('pumps water to a sink by watching its own sensorAbove', function() {
+      var level0 = level(5);
+      var volume0 = volume(10, level0);
+      var level1 = level(5);
+      var volume1 = volume(10, level1);
+      var sensorAbove0 = sensorAbove(level0, 6);
+      var sensorBelow0 = sensorBelow(level0, 4);
+      var bidirPump0 = bidirectionalPump(volume0, sensorAbove0, sensorBelow0, 1, null, volume1);
+
+      level0.incr(2);
+      expect(level0.value()).to.be.equal(7);
+      expect(level1.value()).to.be.equal(5);
+      bidirPump0.onTick();
+      expect(level0.value()).to.be.equal(6.99);
+      expect(level1.value()).to.be.equal(5.01);
+    });
+    it('handles simultaneously a source and a sink', function() {
+      var level0 = level(5);
+      var volume0 = volume(10, level0);
+      var level1 = level(5);
+      var volume1 = volume(10, level1);
+      var level2 = level(5);
+      var volume2 = volume(10, level2);
+      var sensorAbove0 = sensorAbove(level0, 6);
+      var sensorBelow0 = sensorBelow(level0, 4);
+      var bidirPump0 = bidirectionalPump(volume0, sensorAbove0, sensorBelow0, 1, volume1, volume2);
+
+      level0.incr(2);
+      expect(level0.value()).to.be.equal(7);
+      expect(level1.value()).to.be.equal(5);
+      expect(level2.value()).to.be.equal(5);
+      bidirPump0.onTick();
+      expect(level0.value()).to.be.equal(6.99);
+      expect(level1.value()).to.be.equal(5);
+      expect(level2.value()).to.be.equal(5.01);
+
+      level0.decr(2);
+      expect(level0.value()).to.be.equal(4.99);
+      expect(level1.value()).to.be.equal(5);
+      expect(level2.value()).to.be.equal(5.01);
+      bidirPump0.onTick();
+      expect(level0.value()).to.be.equal(4.99);
+      expect(level1.value()).to.be.equal(5);
+      expect(level2.value()).to.be.equal(5.01);
+
+      level0.decr(2);
+      expect(level0.value()).to.be.equal(2.99);
+      expect(level1.value()).to.be.equal(5);
+      expect(level2.value()).to.be.equal(5.01);
+      bidirPump0.onTick();
+      expect(level0.value()).to.be.equal(3);
+      expect(level1.value()).to.be.equal(4.99);
+      expect(level2.value()).to.be.equal(5.01);
+    });
+  });
+  
   describe('flow', function() {
     it('is a pump initially on with a given flowRate', function() {
       var level1 = level(10);

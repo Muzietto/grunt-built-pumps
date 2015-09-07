@@ -102,6 +102,31 @@ var COMPONENTS = (function () {
     };
     return result; 
   }
+  
+  function bidirectionalPump(volume, sensorAbove, sensorBelow, flowRate, source, sink) {
+    if (flowRate < 0) flowRate = -flowRate;
+    var extractor = pump(volume, sensorAbove, flowRate, sink);
+    var filler = pump(source, sensorBelow, -flowRate, volume);
+    return {
+      running : function() {
+        return sensorAbove() || sensorBelow();
+      },
+      flowRate : function() {
+        return flowRate;
+      },
+      onTick : function() {
+        var qty;
+        if (extractor.running()) {
+          qty = -volume.decr(flowRate/10);
+          if (sink && qty !== 0) sink.incr(qty);
+        }
+        if (filler.running()) {
+          qty = -source.decr(flowRate/10);
+          if (source && qty !== 0) volume.incr(qty);
+        }
+      }
+    };
+  }
 
   function flow(source, sink, flowRate) {
     var _ON = true, _OFF = false,
@@ -122,7 +147,8 @@ var COMPONENTS = (function () {
     sensor: sensorAbove(),
     sensorAbove: sensorAbove(),
     sensorBelow: sensorBelow(),
-    pump: pump
+    pump: pump,
+    bidirectionalPump: bidirectionalPump
   };
 }());
 
