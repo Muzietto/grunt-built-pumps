@@ -19,7 +19,7 @@ var topBasinello = WIDGETS.positionalProbe(zenzorAbofe, basinello.domNode(), 10)
 var bottomBasinello = WIDGETS.positionalProbe(zenzorBelofe, basinello.domNode(), 120).paint();
 
 // removes water from basin
-var pumpelloOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumello, zenzorAbofe, 1500)).init($('#parentDiv'), {bottom:57,left:180}, 'right').paint();
+var pumpelloOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumello, zenzorAbofe, 1500)).init($('#parentDiv'), {bottom:57,left:180}, 'left').paint();
 // adds water to basin                                                                                           
 var pumpelloIn = WIDGETS.pumpWidget(COMPONENTS.pump(volumello, zenzorBelofe, -1500)).init($('#parentDiv'), {bottom:43,left:390}, 'left').paint();
 
