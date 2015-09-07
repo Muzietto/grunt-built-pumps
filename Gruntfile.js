@@ -56,7 +56,7 @@ module.exports = function(grunt){
       bundle: {
         files: {
           'build/temp/head.min.js': 'build/temp/bundle_head.js',
-          'build/temp/endbody.min.js': 'build/temp/bundle_endbody.js'
+          'build/temp/endbody.min.js': 'build/temp/bundle_endbody.js',
           'build/temp/endbody2.min.js': 'build/temp/bundle_endbody2.js'
         }
       }
