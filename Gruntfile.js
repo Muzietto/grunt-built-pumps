@@ -41,7 +41,8 @@ module.exports = function(grunt){
       js: {
         files: {
           'build/temp/bundle_head.js': ['public/js/utils/**/*.js', 'public/js/head/**/*.js'],
-          'build/temp/bundle_endbody.js': 'public/js/endbody/**/*.js',
+          'build/temp/bundle_endbody.js': ['public/js/endbody/document_ready.js', 'public/js/endbody/page_dragndrop.js'],
+          'build/temp/bundle_endbody2.js': ['public/js/endbody/document_ready2.js'],
         }
       },
       css: {
@@ -56,6 +57,7 @@ module.exports = function(grunt){
         files: {
           'build/temp/head.min.js': 'build/temp/bundle_head.js',
           'build/temp/endbody.min.js': 'build/temp/bundle_endbody.js'
+          'build/temp/endbody2.min.js': 'build/temp/bundle_endbody2.js'
         }
       }
     },
