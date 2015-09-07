@@ -143,6 +143,9 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
+  function bidirectionalPumpWidget(pump, template) {
+  }
+
   function pumpWidget(pump, template) {
     var _$widget = $(''), _$parent, _pos, _orientation;
     var product = eventer(result());
@@ -273,15 +276,26 @@ var WIDGETS = function(eventer, components) {
       return volume.levelValue();
     }
   }
+  
+  // bidir pump, volume and two sensors
+  function feedbackSystem(bidirPump, volume, sensorAbove, sensorBelow, basinDimensions, $parent) {
+    var pumpPos = {}; // TODO - complete me
+    var basin = eventedBasin(volume, $parent, basinDimensions);
+    var probeAbove = positionalProbe(sensorAbove, $parent, 25);
+    var probeBelow = positionalProbe(sensorBelow, $parent, 50);
+    var pumpWidget = bidirectionalPumpWidget(bidirPump).init($parent, pumpPos, 'left');
+  }
 
   return {
     eventedLevel : eventedLevel,
     positionalProbe : positionalProbe,
     eventedBasin : eventedBasin,
     pumpWidget : pumpWidget,
+    bidirectionalPumpWidget : bidirectionalPumpWidget,
     pipe : pipe,
     liquidProbe : liquidProbe,
-    basin : basin
+    basin : basin,
+    feedbackSystem : feedbackSystem
   };  
    
 }(EVENTER, COMPONENTS);
