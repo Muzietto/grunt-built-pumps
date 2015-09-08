@@ -9,36 +9,28 @@ chai.use(require('sinon-chai'))
 var components = require('../../public/js/head/components.js');
 var widgets = require('../../public/js/head/widgets.js');
 
-var level = components.level;
-var volume = components.volume;
-var sensor = components.sensor;
-var sensorAbove = components.sensorAbove;
-var sensorBelow = components.sensorBelow;
-var pump = components.pump;
-
 describe('widget', function() {
   before(function(){
-    /*
-    var myWindow = require('jsdom').jsdom('<html><head></head><body><div id="mubiParent"></div></body></html>',{url:'http://www.example.com'}).parentWindow;
+    var jquery = require('jquery');
+    var myWindow = require('node-jsdom').jsdom('<html><head></head><body><div id="testParent"></div></body></html>',{url:'http://www.example.com'}).parentWindow;
     global.window = myWindow;
-    global.$ = jquery(myWindow);
-
-    this.app = { _: function(slug) { return slug + '_decoded_with_SHORT_URL'; } };
-    this.client = { app: this.app };
+    global.$ = jquery(myWindow); 
 
     this.$parent =  $('#mubiParent');
-    this.mubi = new MultipleBilling(this.client, this.$parent);
-    */
   });
   after(function(){
-    //global.window = undefined;
+    global.window = undefined; 
   });
   beforeEach(function(){ });
-  afterEach(function(){ });
+  afterEach(function(){ }); 
 
   describe('liquidProbe', function() {
     it('gets created with a sensor and a circular template containing a display of the threshold', function() {
-
+      var probe = widgets.liquidProbe(components.sensorAbove(components.level(15),12)).init(this.$parent, {bottom:0,left:0}).paint();
+      var $probe = probe.domNode();
+      expect($probe.hasClass('widget_container')).to.be.ok;
+      expect($('.liquid_probe',$probe).length).to.be.equal(1);
+      expect($('.sensor_threshold',$probe).text()).to.be.equal('12');
     });
     it('gets initialized inside the page with a background color', function() {
 
@@ -46,7 +38,7 @@ describe('widget', function() {
     describe('whenever a level_change event is met', function() {
       it('has green bkg when the sensor function returns true', function() {
 
-      });
+      }); 
       it('has red bkg when the sensor function returns false', function() {
 
       });

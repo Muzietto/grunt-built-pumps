@@ -54,6 +54,9 @@ var WIDGETS = function(eventer, components) {
         repaint: function() {
           $('.liquid_probe', _$widget).css('background-color', bkgColor());
           return this;
+        },
+        domNode: function() {
+          return _$widget;
         }
       };
     }
