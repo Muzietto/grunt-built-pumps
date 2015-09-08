@@ -8,7 +8,8 @@
     "url": "http://faustinelli.wordpress.com"
   },
   "scripts": {
-    "start": "node app_gbp"  },
+    "start": "node app_gbp"
+  },
   "license": "GPL-2.0",
   "repository": {
     "type": "git",
@@ -37,6 +38,9 @@
     "grunt-processhtml": "^0.3.8",
     "grunt-simple-mocha": "^0.4.0",
     "grunt-ssh-deploy": "^0.3.1",
+    "jquery": "~2.1.1",
+    "mocha": "^2.3.1",
+    "node-jsdom": "^3.1.5",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0"
   }

@@ -29,7 +29,7 @@ module.exports = function(grunt){
     // http://fairwaytech.com/2014/01/understanding-grunt-part-2-automated-testing-with-mocha/
     simplemocha: {
       options: {
-        globals: ['expect'],
+        globals: ['window','document','$','expect'],
         timeout: 1000,
         ignoreLeaks: false,
         ui: 'bdd',
