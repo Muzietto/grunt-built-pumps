@@ -25,27 +25,49 @@ describe('widget', function() {
   afterEach(function(){ }); 
 
   describe('liquidProbe', function() {
-    it('gets created with a sensor and a circular template containing a display of the threshold', function() {
-      var probe = widgets.liquidProbe(components.sensorAbove(components.level(15),12)).init(this.$parent, {bottom:0,left:0}).paint();
+    it('gets created & initialize with a sensor and a named template containing a display of the threshold and a background color', function() {
+      var probe = widgets.liquidProbe(components.sensorAbove(components.level(15), 12)).init(this.$parent, {bottom:0,left:0}).paint();
       var $probe = probe.domNode();
       expect($probe.hasClass('widget_container')).to.be.ok;
-      expect($('.liquid_probe',$probe).length).to.be.equal(1);
-      expect($('.sensor_threshold',$probe).text()).to.be.equal('12');
+      expect($('.liquid_probe', $probe).length).to.be.equal(1);
+      expect($('.sensor_threshold', $probe).text()).to.be.equal('12');
+      expect($('.liquid_probe', $probe).css('background-color')).to.be.not.undefined;
     });
-    it('gets initialized inside the page with a background color', function() {
-
+    it('features a vertical position that is independent from its threshold value (which is a pain)', function() {
+      var sensorThreshold = 12;
+      var probe = widgets.liquidProbe(components.sensorAbove(components.level(15), sensorThreshold)).init(this.$parent, {bottom:0,left:0}).paint();
+      var $probe = probe.domNode();
+      expect($probe.css('bottom')).to.be.not.equal(sensorThreshold + '');
     });
-    describe('whenever a level_change event is met', function() {
-      it('has green bkg when the sensor function returns true', function() {
-
-      }); 
-      it('has red bkg when the sensor function returns false', function() {
-
-      });
+    it('has green bkg when the sensor function returns true', function() {
+      var sensorThreshold = 16;
+      var levelValue = 15;
+      var probe = widgets.liquidProbe(components.sensorAbove(components.level(levelValue), sensorThreshold)).init(this.$parent, {bottom:0,left:0}).paint();
+      var $probe = probe.domNode();
+      expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('green');
+    }); 
+    it('has red bkg when the sensor function returns false', function() {
+      var sensorThreshold = 16;
+      var levelValue = 17;
+      var probe = widgets.liquidProbe(components.sensorAbove(components.level(levelValue), sensorThreshold)).init(this.$parent, {bottom:0,left:0}).paint();
+      var $probe = probe.domNode();
+      expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('red');
     });
   });
   describe('positionalProbe (evented liquidProbe)', function() {
-    it('reacts to repaint events triggered by its eventedLevel', function() {
+    it('features a vertical position that depends on its threshold value (which is GOOD)', function() {
+      var sensorThreshold = 17;
+      var probe = widgets.positionalProbe(components.sensorAbove(components.level(15), sensorThreshold), this.$parent, 50).paint();
+      var $probe = probe.domNode();
+      expect($probe.css('bottom')).to.be.equal(sensorThreshold - 15 + 'px');
+    });
+    it('reacts to level_change events triggered by its eventedLevel by changing background-color', function() {
+      var levello = components.level(15);
+      var probe = widgets.positionalProbe(components.sensorAbove(levello, 16), this.$parent, 50).paint();
+      var $probe = probe.domNode();
+      expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('green');
+      levello.incr(2);
+      expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('red');
     });
   });
 
