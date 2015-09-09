@@ -30,7 +30,7 @@ module.exports = function(grunt){
     simplemocha: {
       options: {
         globals: ['window','document','$','expect'],
-        timeout: 1000,
+        timeout: 3000,
         ignoreLeaks: false,
         ui: 'bdd',
         reporter: 'spec'  // was 'tap'
