@@ -143,23 +143,67 @@ describe('widget', function() {
   });
 
   describe('basin', function() {
-    it('gets created with a volume, a scale volume_level/pixels and a rectangular template containing a display of the level', function() {
-
+    it('gets created with a volume, a scale volume_level/pixels and a template containing a display of the level', function() {
+      var theBasin = widgets.basin(components.volume(1000, components.level(23)), {width:123,height:234,scale:1.2});
+      expect(theBasin.init).to.be.not.undefined;
+      expect(theBasin.paint).to.be.not.undefined;
+      expect(theBasin.repaint).to.be.not.undefined;
     });
     it('gets initialized inside the page with a width and a height in pixels', function() {
+      var dims = {
+        width : 100,
+        height : 200,
+        scale : 2
+      };
+      var basinBottom = 12;
+      var basinLeft = 34;
+      var theBasin = widgets.basin(components.volume(1000, components.level(20)), dims).init(this.$parent, basinBottom, basinLeft).paint();
 
+      expect($('.widget_container', this.$parent).css('bottom')).to.be.equal('12px');
+      expect($('.widget_container', this.$parent).css('left')).to.be.equal('34px');
+      expect($('.basin.outer', this.$parent).css('width')).to.be.equal('50px');
+      expect($('.basin.outer', this.$parent).css('height')).to.be.equal('100px');
+      expect($('.basin.inner', this.$parent).css('height')).to.be.equal('10px');
+      expect($('.basin_level', this.$parent).text()).to.be.equal('20');
     });
-    describe('whenever a level_change event is met', function() {
-      it('increases its height in pixels and updates its display when the volume level increases', function() {
-
-      });
-      it('decreases its height in pixels and updates its display when the volume level decreases', function() {
-
-      });
+    it('will return its dom elements to allow graphical nesting of probes inside', function() {
+      var theBasin = widgets.basin(components.volume(1000, components.level(23)), {width:123,height:234,scale:1.2}).init(this.$parent, 0, 5).paint();
+      expect(theBasin.domNode()[0].tagName.toLowerCase()).to.be.equal('div');
     });
   });
+
   describe('eventedBasin (evented basin)', function() {
-    it('reacts to repaint events triggered by the eventedLevel of its volume', function() {
+    beforeEach(function() {
+    var pos = {
+      bottom : 100,
+      left : 200
+    };
+    this.evlevello = widgets.eventedLevel(20);
+    this.evBasin = widgets.eventedBasin(components.volume(100, this.evlevello), this.$parent, pos).paint();
+    });
+    it('gets initialized inside the page with scale 1:1 and dimensions dictated by the volume inside it', function() {
+      expect($('.widget_container', this.$parent).css('bottom')).to.be.equal('100px');
+      expect($('.widget_container', this.$parent).css('left')).to.be.equal('200px');
+      expect($('.basin.outer', this.$parent).css('width')).to.be.equal('10px');  // sqrt(volume.area)
+      expect($('.basin.outer', this.$parent).css('height')).to.be.equal('80px');  // default for basin
+      expect($('.basin.inner', this.$parent).css('height')).to.be.equal('20px');
+      expect($('.basin_level', this.$parent).text()).to.be.equal('20');
+    });
+    describe('whenever a level_change event is met', function() {
+      it('increases its height in pixels and updates its display when the volume level increases or decreases', function(done) {
+        var counter = 0;
+        var probe = eventer({});
+        probe.on('level_change', function() {
+          counter ++; 
+          if (counter === 2) done();
+        });
+        this.evlevello.incr(5);
+        expect($('.basin.inner', this.$parent).css('height')).to.be.equal('25px');
+        expect($('.basin_level', this.$parent).text()).to.be.equal('25');
+        this.evlevello.decr(10);
+        expect($('.basin.inner', this.$parent).css('height')).to.be.equal('15px');
+        expect($('.basin_level', this.$parent).text()).to.be.equal('15');
+      });
     });
   });
 

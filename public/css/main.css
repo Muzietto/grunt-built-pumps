@@ -86,7 +86,7 @@ div.circular div.sensor_threshold {
 .diagonal_line.negative.not_running {
     background-image: url(../img/minus45_off.png);
 }
-span.pipe {
+span.pipe_label {
   position: absolute;
   bottom: 0px;
   left: 0px;

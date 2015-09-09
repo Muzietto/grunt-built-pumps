@@ -15,6 +15,7 @@ function eventerFactory() {
       if (eventedObjects[event].indexOf(object) === -1) {
         eventedObjects[event].push(object);
       }
+      return object;
     }; 
     object.trigger = staticTrigger;
 

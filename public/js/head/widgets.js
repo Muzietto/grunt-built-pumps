@@ -191,9 +191,9 @@ var WIDGETS = function(eventer, components) {
     }
 
     function stdTemplate() {
-      var basinDims = 'width:' + dimensions.width / dimensions.scale + 'px;' +
-                      'height:' + dimensions.height / dimensions.scale + 'px;';
-      var volumeDims = 'width:100%;height:' + Math.ceil(volumeHeight()) + 'px;';
+      var basinDims = 'width:' + Math.ceil(dimensions.width / dimensions.scale) + 'px;' +
+                      'height:' + Math.ceil(dimensions.height / dimensions.scale) + 'px;';
+      var volumeDims = 'width:100%;height:' + Math.ceil(volumeHeight() / dimensions.scale) + 'px;';
       return '' +
         '<div class="widget_container absolute" id="">' +
         '  <div class="basin outer" style="background-color:lightcoral;border:1px solid black;'+ basinDims +'">' +
@@ -203,7 +203,7 @@ var WIDGETS = function(eventer, components) {
         '</div>';
     }    
 
-    // output shall always be in pixels!!!
+    // output is in mm, not in pixels!!
     function volumeHeight() {
       return volume.levelValue();
     }
@@ -214,10 +214,6 @@ var WIDGETS = function(eventer, components) {
     var widget = eventer(basin(volume, undefined, template).init($parent, pos.bottom||0, pos.left||0));
     widget.on('level_change', function() { widget.repaint(); });
     return widget;
-  }
-  
-
-  function bidirectionalPumpWidget(pump, template) {
   }
 
   function pumpWidget(pump, template) {
@@ -279,6 +275,9 @@ var WIDGETS = function(eventer, components) {
     function bkgColor() {
       return pump.running() ? 'green' : 'red';
     }
+  }
+
+  function bidirectionalPumpWidget(pump, template) {
   }
 
   // bidir pump, volume and two sensors
