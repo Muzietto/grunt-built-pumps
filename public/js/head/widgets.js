@@ -26,14 +26,6 @@ var WIDGETS = function(eventer, components) {
     };
   }
 
-  // sensor threshold defines vertical position
-  // sensor must be based on an eventedLevel
-  function positionalProbe(sensor, $parent, left, template) {
-    var widget = eventer(liquidProbe(sensor, template).init($parent, {bottom:sensor.threshold()-15, left:left}));
-    widget.on('level_change', function() { widget.repaint(); });
-    return widget;
-  }
-
   // extremely unhandy (vertical position independent from sensor threshold)
   function liquidProbe(sensor, template) {
     var _$widget = $(''), _$parent, _pos;
@@ -90,6 +82,14 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
+  // sensor threshold defines vertical position
+  // sensor must be based on an eventedLevel
+  function positionalProbe(sensor, $parent, left, template) {
+    var widget = eventer(liquidProbe(sensor, template).init($parent, {bottom:sensor.threshold()-15, left:left}));
+    widget.on('level_change', function() { widget.repaint(); });
+    return widget;
+  }
+
   function pipe(flow, incline, template) {
     var _$widget = $(''), _$parent, _pos;
     var widget = eventer(result());
@@ -136,7 +136,7 @@ var WIDGETS = function(eventer, components) {
     function stdTemplate() {
       return '' +
         '<div class="widget_container absolute" id="">' +
-        '  <span class="pipe">' + flow.flowRate() + '</span>' +
+        '  <span class="pipe_label">' + flow.flowRate() + '</span>' +
         '  <div class="pipe diagonal_line ' + incline + ' ' + isRunning() + '"></div>' +
         '</div>';
     }
@@ -144,77 +144,6 @@ var WIDGETS = function(eventer, components) {
     function isRunning() {
       return (flow.running()) ? 'running' : 'not_running';
     }
-  }
-
-  function bidirectionalPumpWidget(pump, template) {
-  }
-
-  function pumpWidget(pump, template) {
-    var _$widget = $(''), _$parent, _pos, _orientation;
-    var product = eventer(result());
-    product.on('level_change', product.repaint);
-    
-    return product;
-    
-    function result() {
-      return {
-        init: function($parent, pos, orientation) {
-          _$parent = $parent;
-          _pos = pos;
-          _orientation = orientation;
-          return this;
-        },
-        paint: function() {
-          _$widget = $widget();
-          _$widget.appendTo(_$parent);
-          return this;
-        },
-        repaint: function() {
-          $('.pump_widget.circular', _$widget).css('background-color', bkgColor());
-          return this;
-        },
-        onTick: function() {
-          pump.onTick();
-          return this;
-        }
-      };
-    }
-    
-    function markup() { 
-      return (template) ? template.process(pump) : stdTemplate();
-    }
-
-    function $widget() {
-      var style = {};
-      if (_pos.top) style.top = _pos.top;
-      if (_pos.left) style.left = _pos.left;
-      if (_pos.bottom) style.bottom = _pos.bottom;
-      if (_pos.right) style.right = _pos.right;
-      style['z-index'] = 49;
-      return $(markup()).css(style);
-    }
-    
-    function stdTemplate() {
-      var bkg = 'style="background-color:' + bkgColor() + '"';
-      return '' +
-        '<div class="widget_container absolute" id="">' +
-        '  <span class="pump_widget flow_rate">' + pump.flowRate() + '</span>' +
-        '  <div class="pump_widget circular absolute" ' + bkg + '>' +
-        '    <div class="arrow-' + _orientation + '"></div>' +
-        '  </div>' +
-        '</div>';
-    }
-    
-    function bkgColor() {
-      return pump.running() ? 'green' : 'red';
-    }
-  }
-
-  // evented widget
-  function eventedBasin(volume, $parent, pos, template) {
-    var widget = eventer(basin(volume, undefined, template).init($parent, pos.bottom||0, pos.left||0));
-    widget.on('level_change', function() { widget.repaint(); });
-    return widget;
   }
 
   // dimensions are in pixels
@@ -279,7 +208,79 @@ var WIDGETS = function(eventer, components) {
       return volume.levelValue();
     }
   }
+
+  // evented widget
+  function eventedBasin(volume, $parent, pos, template) {
+    var widget = eventer(basin(volume, undefined, template).init($parent, pos.bottom||0, pos.left||0));
+    widget.on('level_change', function() { widget.repaint(); });
+    return widget;
+  }
   
+
+  function bidirectionalPumpWidget(pump, template) {
+  }
+
+  function pumpWidget(pump, template) {
+    var _$widget = $(''), _$parent, _pos, _orientation;
+    var product = eventer(result());
+    product.on('level_change', product.repaint);
+    
+    return product;
+    
+    function result() {
+      return {
+        init: function($parent, pos, orientation) {
+          _$parent = $parent;
+          _pos = pos;
+          _orientation = orientation;
+          return this;
+        },
+        paint: function() {
+          _$widget = $widget();
+          _$widget.appendTo(_$parent);
+          return this;
+        },
+        repaint: function() {
+          $('.pump_widget.circular', _$widget).css('background-color', bkgColor());
+          return this;
+        },
+        onTick: function() {
+          pump.onTick();
+          return this;
+        }
+      };
+    }
+    
+    function markup() { 
+      return (template) ? template.process(pump) : stdTemplate();
+    }
+
+    function $widget() {
+      var style = {};
+      if (_pos.top) style.top = _pos.top;
+      if (_pos.left) style.left = _pos.left;
+      if (_pos.bottom) style.bottom = _pos.bottom;
+      if (_pos.right) style.right = _pos.right;
+      style['z-index'] = 49;
+      return $(markup()).css(style);
+    }
+
+    function stdTemplate() {
+      var bkg = 'style="background-color:' + bkgColor() + '"';
+      return '' +
+        '<div class="widget_container absolute" id="">' +
+        '  <span class="pump_widget flow_rate">' + pump.flowRate() + '</span>' +
+        '  <div class="pump_widget circular absolute" ' + bkg + '>' +
+        '    <div class="arrow-' + _orientation + '"></div>' +
+        '  </div>' +
+        '</div>';
+    }
+
+    function bkgColor() {
+      return pump.running() ? 'green' : 'red';
+    }
+  }
+
   // bidir pump, volume and two sensors
   function feedbackSystem(bidirPump, volume, sensorAbove, sensorBelow, basinDimensions, $parent) {
     var pumpPos = {}; // TODO - complete me

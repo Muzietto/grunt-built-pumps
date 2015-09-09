@@ -8,6 +8,7 @@ chai.use(require('sinon-chai'))
 
 var components = require('../../public/js/head/components.js');
 var widgets = require('../../public/js/head/widgets.js');
+var eventer = require('../../public/js/head/eventer.js').eventer;
 
 describe('widget', function() {
   before(function(){
@@ -15,14 +16,30 @@ describe('widget', function() {
     var myWindow = require('node-jsdom').jsdom('<html><head></head><body><div id="testParent"></div></body></html>',{url:'http://www.example.com'}).parentWindow;
     global.window = myWindow;
     global.$ = jquery(myWindow); 
-
-    this.$parent =  $('#mubiParent');
   });
   after(function(){
     global.window = undefined; 
   });
-  beforeEach(function(){ });
-  afterEach(function(){ }); 
+  beforeEach(function(){ 
+
+    this.$parent =  $('#testParent');
+  });
+  afterEach(function(){ 
+    this.$parent.empty();
+  }); 
+
+  describe('eventedLevel', function() {
+    it('triggers event_change when it increases or decreases', function(done) {
+      var counter = 0;
+      eventer({}).on('level_change', function() {
+        counter ++; 
+        if (counter === 1) done();
+      });
+      var evlo = widgets.eventedLevel(12);
+      evlo.incr(1);
+      evlo.decr(1);
+    });
+  });
 
   describe('liquidProbe', function() {
     it('gets created & initialize with a sensor and a named template containing a display of the threshold and a background color', function() {
@@ -54,36 +71,73 @@ describe('widget', function() {
       expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('red');
     });
   });
+
   describe('positionalProbe (evented liquidProbe)', function() {
     it('features a vertical position that depends on its threshold value (which is GOOD)', function() {
       var sensorThreshold = 17;
-      var probe = widgets.positionalProbe(components.sensorAbove(components.level(15), sensorThreshold), this.$parent, 50).paint();
-      var $probe = probe.domNode();
+      var evLevello = widgets.eventedLevel(15);
+      var probe = widgets.positionalProbe(components.sensorAbove(evLevello, sensorThreshold), this.$parent, 50).paint();
+      var $probe = probe.domNode(); 
       expect($probe.css('bottom')).to.be.equal(sensorThreshold - 15 + 'px');
     });
     it('reacts to level_change events triggered by its eventedLevel by changing background-color', function() {
-      var levello = components.level(15);
-      var probe = widgets.positionalProbe(components.sensorAbove(levello, 16), this.$parent, 50).paint();
+      var sensorThreshold = 16;
+      var levello = widgets.eventedLevel(15);
+      var probe = widgets.positionalProbe(components.sensorAbove(levello, sensorThreshold), this.$parent, 50).paint();
       var $probe = probe.domNode();
-      expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('green');
+      expect($('.liquid_probe', this.$parent).css('background-color')).to.be.equal('green');
       levello.incr(2);
-      expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('red');
+      expect($('.liquid_probe', this.$parent).css('background-color')).to.be.equal('red');
     });
   });
 
   describe('pipe', function() {
-    it('gets created with a flow and an incline', function() {
-
+    beforeEach(function() {
+      this.evlevelUp = widgets.eventedLevel(55);
+      this.volumeUp = components.volume(25000, this.evlevelUp);
+      this.evlevelDown = widgets.eventedLevel(5);
+      this.volumeDown = components.volume(25000, this.evlevelDown);
+      this.flowConn = components.flow(this.volumeUp, this.volumeDown, 4000);      
     });
+    it('gets created with a flow and an incline', function() {
+      var flowPipe = widgets.pipe(this.flowConn, 'negative');
+      expect(flowPipe.init).to.be.not.undefined;
+      expect(flowPipe.paint).to.be.not.undefined;
+      expect(flowPipe.repaint).to.be.not.undefined;
+    }); 
     it('gets initialized inside the page as a diagonal line along with a display of the flowRate', function() {
-
+      var flowPipe = widgets.pipe(this.flowConn, 'negative').init(this.$parent, {bottom:111,left:222,width:333,height:444}).paint();
+      expect($('.pipe', this.$parent).hasClass('negative')).to.be.ok;
+      expect($('.pipe_label', this.$parent).text()).to.be.equal('4000');
+      var $container = $('.widget_container', this.$parent);
+      expect($container.css('bottom')).to.be.equal('111px');
+      expect($container.css('left')).to.be.equal('222px');
+      expect($container.css('width')).to.be.equal('333px');
+      expect($container.css('height')).to.be.equal('444px');
     });
     describe('whenever a level_change event is met', function() {
-      it('gets class \'not_running\' if flow is off', function() {
-
+      it('gets class \'running\' if flow is on', function(done) {
+        // pipe is on by default
+        var flowPipe = widgets.pipe(this.flowConn, 'negative').init(this.$parent, {bottom:111,left:222,width:333,height:444}).paint();
+        var counter = 0;
+        var probe = eventer({});
+        probe.on('level_change', function() {
+          counter ++; 
+          if (counter === 1) done();
+        });
+        probe.trigger('level_change');
+        expect($('.pipe', this.$parent).hasClass('running')).to.be.ok;
       });
-      it('gets class \'running\' if flow is on', function() {
-
+      it('gets class \'not_running\' if flow is off', function(done) {
+        var flowPipe = widgets.pipe(this.flowConn, 'negative').init(this.$parent, {bottom:111,left:222,width:333,height:444}).paint();
+        this.flowConn.switchOff();
+        var counter = 0;
+        var probe = eventer({}).on('level_change', function() {
+          counter ++; 
+          if (counter === 1) done();
+        });
+        probe.trigger('level_change');
+        expect($('.pipe', this.$parent).hasClass('not_running')).to.be.ok;
       });
     });
   });
