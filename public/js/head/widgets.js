@@ -142,7 +142,7 @@ var WIDGETS = function(eventer, components) {
     }
 
     function isRunning() {
-      return (flow.running()) ? 'running' : 'not_running';
+      return (flow.running() !== 0) ? 'running' : 'not_running';
     }
   }
 
@@ -263,7 +263,7 @@ var WIDGETS = function(eventer, components) {
     }
 
     function isRunning() {
-      return (pump.running()) ? 'running' : 'not_running';
+      return (pump.running() !== 0) ? 'running' : 'not_running';
     }
   }
 
