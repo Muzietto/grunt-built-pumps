@@ -22,7 +22,7 @@ describe('component', function() {
   before(function(){ });
   after(function(){ }); 
   beforeEach(function(){ });
-  afterEach(function(){ });
+  afterEach(function(){ }); 
 
   describe('level', function() {
     it('can be created with starting value or with default zero', function() {
