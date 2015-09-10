@@ -212,21 +212,18 @@ describe('widget', function() {
       this.evlevel = widgets.eventedLevel(55);
       this.sensor = components.sensorBelow(this.evlevel, 30);
       this.volume = components.volume(25000, this.evlevel);
-      this.thePump = widgets.pumpWidget(components.pump(this.volume, this.sensor, -1500));
+      this.pos = {
+        bottom : 100,
+        left : 200
+      };
+      this.thePump = widgets.pumpWidget(components.pump(this.volume, this.sensor, -1500), this.$parent, this.pos, 'right');
     });
     it('gets created with a pump at its heart', function() {
-      expect(this.thePump.init).to.be.not.undefined;
-      expect(this.thePump.paint).to.be.not.undefined;
       expect(this.thePump.repaint).to.be.not.undefined; 
       expect(this.thePump.on).to.be.not.undefined;
       expect(this.thePump.trigger).to.be.not.undefined;
     });
     it('gets initialized with an oriented triangle and a label with the flow rate of the pump', function() {
-      var pos = {
-        bottom : 100,
-        left : 200
-      };
-      var widget = this.thePump.init(this.$parent, pos, 'right').paint();
       expect($('.widget_container', this.$parent).css('left')).to.be.equal('200px');
       expect($('.widget_container', this.$parent).css('bottom')).to.be.equal('100px');
       expect($('.pump_flow_rate', this.$parent).text()).to.be.equal('-1500');
@@ -235,17 +232,12 @@ describe('widget', function() {
     });
     describe('whenever a level_change event is met', function() {
       it('changes bkg color class whether it\'s running or not', function(done) {
-        var pos = {
-          bottom : 100,
-          left : 200
-        };
-        var widget = this.thePump.init(this.$parent, pos, 'right').paint();
         var counter = 0;
         var probe = eventer({});
         probe.on('level_change', function() {
           counter ++;
           if (counter === 2) done();
-        }); 
+        });
         expect($('.pump', this.$parent).hasClass('not_running')).to.be.ok;
         this.evlevel.decr(30);
         expect($('.pump', this.$parent).hasClass('running')).to.be.ok;
@@ -254,8 +246,42 @@ describe('widget', function() {
       });
     });
   });
-  describe('eventedPumpWidget (not yet existing)',function(){
-    it.skip('binds the pump onTick to a global tick event', function() {});
+
+  describe('bidirectionalPumpWidget', function() { 
+    beforeEach(function() {
+      this.evlevel = widgets.eventedLevel(5);
+      this.volume = components.volume(10, this.evlevel);
+      this.sensorAbove = components.sensorAbove(this.evlevel, 6);
+      this.sensorBelow = components.sensorBelow(this.evlevel, 4);
+      this.pos = { bottom : 100,left : 200 };
+      this.bidirPump = components.bidirectionalPump(this.volume, this.sensorAbove, this.sensorBelow, 1);
+      this.thePump = widgets.bidirectionalPumpWidget(this.bidirPump, this.$parent, this.pos);
+    });
+    it('gets created with a pump at its heart', function() {
+      expect(this.thePump.repaint).to.be.not.undefined;
+    });
+    it('gets initialized as a plain pumpWidget, with orientation upwards', function() {
+      expect($('.pump_flow_rate', this.$parent).text()).to.be.equal('1');
+      expect($('.pump', this.$parent).hasClass('not_running')).to.be.ok;
+      expect($('.arrow-top', this.$parent).length).to.be.equal(1);
+    });
+    describe('whenever a level_change event is met', function() {
+      it('flips its orientation to follow the direction of the flow rate', function(done) {
+        var counter = 0;
+        var probe = eventer({});
+        probe.on('level_change', function() {
+          counter ++;
+          if (counter === 2) done();
+        });
+        expect($('.arrow-top', this.$parent).length).to.be.equal(1);
+        this.evlevel.decr(30);
+        expect($('.arrow-top', this.$parent).length).to.be.equal(0);
+        expect($('.arrow-right', this.$parent).length).to.be.equal(1);
+        this.evlevel.incr(30);
+        expect($('.arrow-right', this.$parent).length).to.be.equal(0);
+        expect($('.arrow-left', this.$parent).length).to.be.equal(1);
+      });
+    });
   });
 
   // pump, basin and two sensors

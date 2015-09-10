@@ -102,7 +102,7 @@ var COMPONENTS = (function () {
     };
     return result; 
   }
-  
+
   function bidirectionalPump(volume, sensorAbove, sensorBelow, flowRate, source, sink) {
     if (flowRate < 0) flowRate = -flowRate;
     var extractor = pump(volume, sensorAbove, flowRate, sink);

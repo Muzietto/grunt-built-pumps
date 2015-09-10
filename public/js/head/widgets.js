@@ -216,26 +216,15 @@ var WIDGETS = function(eventer, components) {
     return widget;
   }
 
-  function pumpWidget(pump, template) {
-    var _$widget = $(''), _$parent, _pos, _orientation;
+  function pumpWidget(pump, $parent, pos, orientation, template) {
+    var _$widget = $widget();
+    _$widget.appendTo($parent);
     var product = eventer(result());
     product.on('level_change', product.repaint);
-    
     return product;
     
     function result() {
       return {
-        init: function($parent, pos, orientation) {
-          _$parent = $parent;
-          _pos = pos;
-          _orientation = orientation;
-          return this;
-        },
-        paint: function() {
-          _$widget = $widget();
-          _$widget.appendTo(_$parent);
-          return this;
-        },
         repaint: function() {
           $('.pump', _$widget).removeClass('running')
                               .removeClass('not_running')
@@ -255,10 +244,10 @@ var WIDGETS = function(eventer, components) {
 
     function $widget() {
       var style = {};
-      if (_pos.top) style.top = _pos.top;
-      if (_pos.left) style.left = _pos.left;
-      if (_pos.bottom) style.bottom = _pos.bottom;
-      if (_pos.right) style.right = _pos.right;
+      if (pos.top) style.top = pos.top;
+      if (pos.left) style.left = pos.left;
+      if (pos.bottom) style.bottom = pos.bottom;
+      if (pos.right) style.right = pos.right;
       style['z-index'] = 49;
       return $(markup()).css(style);
     }
@@ -268,7 +257,7 @@ var WIDGETS = function(eventer, components) {
         '<div class="widget_container absolute" id="">' +
         '  <span class="pump_flow_rate">' + pump.flowRate() + '</span>' +
         '  <div class="pump circular absolute ' + isRunning() + '">' +
-        '    <div class="arrow-' + _orientation + '"></div>' +
+        '    <div class="arrow-' + orientation + '"></div>' +
         '  </div>' +
         '</div>';
     }
@@ -278,7 +267,11 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
-  function bidirectionalPumpWidget(pump, template) {
+  function bidirectionalPumpWidget(pump, $parent, pos, template) {
+    var result = pumpWidget(pump, $parent, pos, 'top');
+    return result;
+
+    function _orientation() {}
   }
 
   // bidir pump, volume and two sensors
@@ -301,7 +294,7 @@ var WIDGETS = function(eventer, components) {
     basin : basin,
     feedbackSystem : feedbackSystem
   };  
-   
+
 }(EVENTER, COMPONENTS);
 
 
