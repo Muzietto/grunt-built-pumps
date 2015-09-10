@@ -17,11 +17,11 @@ var evBasinFinal = WIDGETS.eventedBasin(volumeFinal, $('#parentDiv2'), {left:400
 var flowConn = COMPONENTS.flow(volumeUp, volumeDown, 4000);
 
 // adds water to upper basin
-var pumpIn = WIDGETS.pumpWidget(COMPONENTS.pump(volumeUp, sensorUp, -1500)).init($('#parentDiv2'), {bottom:150,left:20}, 'right').paint();
+var pumpIn = WIDGETS.pumpWidget(COMPONENTS.pump(volumeUp, sensorUp, -1500), $('#parentDiv2'), {bottom:150,left:20}, 'right');
 // connects the two basins
 var flowConnPipe = WIDGETS.pipe(flowConn, 'negative').init($('#parentDiv2'), {bottom:5,left:180,width:100,height:110}).paint();
 // removes water from lower basin
-var pumpOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumeDown, sensorDown, 100, volumeFinal)).init($('#parentDiv2'), {bottom:43,left:390}, 'right').paint();
+var pumpOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumeDown, sensorDown, 100, volumeFinal), $('#parentDiv2'), {bottom:43,left:390}, 'right');
 
 $('#offButton').click(flowConn.switchOff);
 $('#onButton').click(flowConn.switchOn);
