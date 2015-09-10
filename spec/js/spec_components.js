@@ -222,15 +222,19 @@ describe('component', function() {
     });  });
 
   describe('pump', function(){
+    it('requires a non-null flow rate', function() {
+      expect(function() { pump(volume(2, level(1))); }).to.throw();
+      expect(function() { pump(volume(2, level(1), 0)); }).to.throw();
+    });
     it('may be on or off depending on what its sensor senses', function() {
-      var level0 = level();
+      var level0 = level(4);
       var volume0 = volume(10, level0);
-      var sensor0 = sensor(level0)
-      var pump0 = pump(volume0, sensor0);
-      expect(pump0.running()).to.be.not.ok;
+      var sensor0 = sensorAbove(level0, 5)
+      var pump0 = pump(volume0, sensor0, 1);
+      expect(pump0.running()).to.be.equal(0);
       
-      level0.incr(0.01);
-      expect(pump0.running()).to.be.ok;
+      level0.incr(2);
+      expect(pump0.running()).to.be.equal(1);
     });
     it('pumps OUT the volume depending on its flow rate', function() {
       var level0 = level(5.01);
@@ -288,13 +292,13 @@ describe('component', function() {
       var sensorBelow0 = sensorBelow(level0, 4);
       var bidirPump0 = bidirectionalPump(volume0, sensorAbove0, sensorBelow0, 1);
 
-      expect(bidirPump0.running()).to.be.not.ok;
-      level0.incr(2);
-      expect(bidirPump0.running()).to.be.ok;
+      expect(bidirPump0.running()).to.be.equal(0);
+      level0.incr(2); // extractor starts
+      expect(bidirPump0.running()).to.be.equal(1);
       level0.decr(2);
-      expect(bidirPump0.running()).to.be.not.ok;
-      level0.decr(2);
-      expect(bidirPump0.running()).to.be.ok;
+      expect(bidirPump0.running()).to.be.equal(0);
+      level0.decr(2); // filler starts
+      expect(bidirPump0.running()).to.be.equal(-1);
     });
     it('pumps water from a source by watching its own sensorBelow', function() {
       var level0 = level(5);

@@ -86,9 +86,12 @@ var COMPONENTS = (function () {
 
   // flowRate > 0 ==> REMOVE water
   function pump(source, sensor, flowRate, sink) {
+    if (typeof flowRate === 'undefined' || flowRate === 0) throw 'pumps must have non-negative flow rate';
     var result = {
       running : function() {
-        return sensor();
+        var result = 0;
+        if (sensor()) result = flowRate / Math.abs(flowRate);
+        return result;
       },
       flowRate : function() {
         return flowRate;
@@ -109,7 +112,10 @@ var COMPONENTS = (function () {
     var filler = pump(source, sensorBelow, -flowRate, volume);
     return {
       running : function() {
-        return sensorAbove() || sensorBelow();
+        var result = 0;
+        if (sensorAbove()) result = flowRate / Math.abs(flowRate);
+        if (sensorBelow()) result = -flowRate / Math.abs(flowRate);
+        return result;
       },
       flowRate : function() {
         return flowRate;
