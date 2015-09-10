@@ -237,7 +237,9 @@ var WIDGETS = function(eventer, components) {
           return this;
         },
         repaint: function() {
-          $('.pump_widget.circular', _$widget).css('background-color', bkgColor());
+          $('.pump', _$widget).removeClass('running')
+                              .removeClass('not_running')
+                              .addClass(isRunning());
           return this;
         },
         onTick: function() {
@@ -262,18 +264,17 @@ var WIDGETS = function(eventer, components) {
     }
 
     function stdTemplate() {
-      var bkg = 'style="background-color:' + bkgColor() + '"';
       return '' +
         '<div class="widget_container absolute" id="">' +
-        '  <span class="pump_widget flow_rate">' + pump.flowRate() + '</span>' +
-        '  <div class="pump_widget circular absolute" ' + bkg + '>' +
+        '  <span class="pump_flow_rate">' + pump.flowRate() + '</span>' +
+        '  <div class="pump circular absolute ' + isRunning() + '">' +
         '    <div class="arrow-' + _orientation + '"></div>' +
         '  </div>' +
         '</div>';
     }
 
-    function bkgColor() {
-      return pump.running() ? 'green' : 'red';
+    function isRunning() {
+      return (pump.running()) ? 'running' : 'not_running';
     }
   }
 

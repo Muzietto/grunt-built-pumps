@@ -91,5 +91,11 @@ span.pipe_label {
   bottom: 0px;
   left: 0px;
 }
+.pump.running {
+    background-color: green;
+}
+.pump.not_running {
+    background-color: red;
+}
 
 pre {display:inline;margin:0px 2px;}

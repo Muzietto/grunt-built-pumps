@@ -174,12 +174,12 @@ describe('widget', function() {
 
   describe('eventedBasin (evented basin)', function() {
     beforeEach(function() {
-    var pos = {
-      bottom : 100,
-      left : 200
-    };
-    this.evlevello = widgets.eventedLevel(20);
-    this.evBasin = widgets.eventedBasin(components.volume(100, this.evlevello), this.$parent, pos).paint();
+      var pos = {
+        bottom : 100,
+        left : 200
+      };
+      this.evlevello = widgets.eventedLevel(20);
+      this.evBasin = widgets.eventedBasin(components.volume(100, this.evlevello), this.$parent, pos).paint();
     });
     it('gets initialized inside the page with scale 1:1 and dimensions dictated by the volume inside it', function() {
       expect($('.widget_container', this.$parent).css('bottom')).to.be.equal('100px');
@@ -190,7 +190,7 @@ describe('widget', function() {
       expect($('.basin_level', this.$parent).text()).to.be.equal('20');
     });
     describe('whenever a level_change event is met', function() {
-      it('increases its height in pixels and updates its display when the volume level increases or decreases', function(done) {
+      it('changes its height in pixels and updates its display when the volume level changes', function(done) {
         var counter = 0;
         var probe = eventer({});
         probe.on('level_change', function() {
@@ -207,16 +207,50 @@ describe('widget', function() {
     });
   });
 
-  describe('pumpWidget', function() {
-    it('gets created with ...', function() {
-
+  describe('pumpWidget', function() { 
+    beforeEach(function() {
+      this.evlevel = widgets.eventedLevel(55);
+      this.sensor = components.sensorBelow(this.evlevel, 30);
+      this.volume = components.volume(25000, this.evlevel);
+      this.thePump = widgets.pumpWidget(components.pump(this.volume, this.sensor, -1500));
+    });
+    it('gets created with a pump at its heart', function() {
+      expect(this.thePump.init).to.be.not.undefined;
+      expect(this.thePump.paint).to.be.not.undefined;
+      expect(this.thePump.repaint).to.be.not.undefined; 
+      expect(this.thePump.on).to.be.not.undefined;
+      expect(this.thePump.trigger).to.be.not.undefined;
+    });
+    it('gets initialized with an oriented triangle and a label with the flow rate of the pump', function() {
+      var pos = {
+        bottom : 100,
+        left : 200
+      };
+      var widget = this.thePump.init(this.$parent, pos, 'right').paint();
+      expect($('.widget_container', this.$parent).css('left')).to.be.equal('200px');
+      expect($('.widget_container', this.$parent).css('bottom')).to.be.equal('100px');
+      expect($('.pump_flow_rate', this.$parent).text()).to.be.equal('-1500');
+      expect($('.pump', this.$parent).hasClass('not_running')).to.be.ok;
+      expect($('.arrow-right', this.$parent).length).to.be.equal(1);
     });
     describe('whenever a level_change event is met', function() {
-      it('gets green bkg when it\' running', function() {
-
-      });
-      it('gets red bkg when it is not running', function() {
-
+      it('changes bkg color class whether it\'s running or not', function(done) {
+        var pos = {
+          bottom : 100,
+          left : 200
+        };
+        var widget = this.thePump.init(this.$parent, pos, 'right').paint();
+        var counter = 0;
+        var probe = eventer({});
+        probe.on('level_change', function() {
+          counter ++;
+          if (counter === 2) done();
+        }); 
+        expect($('.pump', this.$parent).hasClass('not_running')).to.be.ok;
+        this.evlevel.decr(30);
+        expect($('.pump', this.$parent).hasClass('running')).to.be.ok;
+        this.evlevel.incr(30);
+        expect($('.pump', this.$parent).hasClass('not_running')).to.be.ok;
       });
     });
   });
