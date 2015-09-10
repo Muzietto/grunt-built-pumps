@@ -273,7 +273,6 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
-  // function pumpWidget(pump, $parent, pos, orientation, template)
   function bidirectionalPumpWidget(pump, $parent, pos, template) {
     var result = pumpWidget(pump, $parent, pos, orientation);
     return result;
@@ -286,13 +285,13 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
-  // bidir pump, volume and two sensors
-  function feedbackSystem(bidirPump, volume, sensorAbove, sensorBelow, basinDimensions, $parent) {
-    var pumpPos = {}; // TODO - complete me
-    var basin = eventedBasin(volume, $parent, basinDimensions);
-    var probeAbove = positionalProbe(sensorAbove, $parent, 25);
-    var probeBelow = positionalProbe(sensorBelow, $parent, 50);
-    var pumpWidget = bidirectionalPumpWidget(bidirPump).init($parent, pumpPos, 'left');
+  function feedbackSystem(systemComponents, $parent, basinPos, basinDims) {
+    var pumpPos = { bottom: basinPos.bottom + 10, left: basinPos.left - 20};
+    var basin = eventedBasin(systemComponents.volume, $parent, basinPos).paint();
+    var probeAbove = positionalProbe(systemComponents.sensorAbove, basin.domNode(), 15).paint();
+    var probeBelow = positionalProbe(systemComponents.sensorBelow, basin.domNode(), 50).paint();
+    var pumpWidget = bidirectionalPumpWidget(systemComponents.pump, $parent, pumpPos);
+    return basin;
   }
 
   return {

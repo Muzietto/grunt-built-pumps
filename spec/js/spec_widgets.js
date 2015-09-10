@@ -285,6 +285,32 @@ describe('widget', function() {
   });
 
   // pump, basin and two sensors
-  describe('feedbackSystem',function(){}); 
+  describe('feedbackSystem',function(){
+    beforeEach(function() {
+      this.evlevel = widgets.eventedLevel(5);
+      this.volume = components.volume(10, this.evlevel);
+      this.sensorAbove = components.sensorAbove(this.evlevel, 6);
+      this.sensorBelow = components.sensorBelow(this.evlevel, 4);
+      this.basinPos = { bottom : 100, left : 200 };
+      this.basinDims = { width : 100, height : 200 };
+      this.bidirPump = components.bidirectionalPump(this.volume, this.sensorAbove, this.sensorBelow, 1);
+      var systemComponents = {
+        volume : this.volume,
+        sensorAbove : this.sensorAbove,
+        sensorBelow : this.sensorBelow,
+        pump : this.bidirPump
+      };
+      this.theSystem = widgets.feedbackSystem(systemComponents, this.$parent, this.basinPos, this.basinDims);
+    });
+    it('gets created with a basin at its heart', function() {
+      expect(this.theSystem.repaint).to.be.not.undefined;
+    });
+    it('gets initialized as a pumpWidget, an eventedBasin and two positional probes', function() {
+      expect($('.widget_container', this.$parent).length).to.be.equal(4);
+      expect($('.pump', this.$parent).length).to.be.equal(1);
+      expect($('.basin.outer', this.$parent).length).to.be.equal(1);
+      expect($('.liquid_probe', this.$parent).length).to.be.equal(2);
+    });
+  }); 
 
 }); // end tests
