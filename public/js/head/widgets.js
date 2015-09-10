@@ -217,6 +217,7 @@ var WIDGETS = function(eventer, components) {
   }
 
   function pumpWidget(pump, $parent, pos, orientation, template) {
+    var _orientation = (typeof orientation === 'function') ? orientation : function() { return orientation; };
     var _$widget = $widget();
     _$widget.appendTo($parent);
     var product = eventer(result());
@@ -229,6 +230,11 @@ var WIDGETS = function(eventer, components) {
           $('.pump', _$widget).removeClass('running')
                               .removeClass('not_running')
                               .addClass(isRunning());
+          $('.pump .orientation', _$widget).removeClass('arrow-up')
+                                           .removeClass('arrow-left')
+                                           .removeClass('arrow-right')
+                                           .removeClass('arrow-down')
+                                           .addClass('arrow-' + _orientation());
           return this;
         },
         onTick: function() {
@@ -257,7 +263,7 @@ var WIDGETS = function(eventer, components) {
         '<div class="widget_container absolute" id="">' +
         '  <span class="pump_flow_rate">' + pump.flowRate() + '</span>' +
         '  <div class="pump circular absolute ' + isRunning() + '">' +
-        '    <div class="arrow-' + orientation + '"></div>' +
+        '    <div class="orientation arrow-' + _orientation() + '"></div>' +
         '  </div>' +
         '</div>';
     }
@@ -267,11 +273,17 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
+  // function pumpWidget(pump, $parent, pos, orientation, template)
   function bidirectionalPumpWidget(pump, $parent, pos, template) {
-    var result = pumpWidget(pump, $parent, pos, 'top');
+    var result = pumpWidget(pump, $parent, pos, orientation);
     return result;
 
-    function _orientation() {}
+    function orientation() {
+      var result = 'up';
+      if (pump.running() === 1) result = 'left'; // extracting
+      if (pump.running() === -1) result = 'right'; // filling
+      return result;
+    }
   }
 
   // bidir pump, volume and two sensors

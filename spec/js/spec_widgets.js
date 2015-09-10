@@ -263,19 +263,19 @@ describe('widget', function() {
     it('gets initialized as a plain pumpWidget, with orientation upwards', function() {
       expect($('.pump_flow_rate', this.$parent).text()).to.be.equal('1');
       expect($('.pump', this.$parent).hasClass('not_running')).to.be.ok;
-      expect($('.arrow-top', this.$parent).length).to.be.equal(1);
+      expect($('.arrow-up', this.$parent).length).to.be.equal(1);
     });
     describe('whenever a level_change event is met', function() {
-      it.skip('flips its orientation to follow the direction of the flow rate', function(done) {
+      it('flips its orientation to follow the direction of the flow rate', function(done) {
         var counter = 0;
         var probe = eventer({});
         probe.on('level_change', function() {
           counter ++;
           if (counter === 2) done();
         });
-        expect($('.arrow-top', this.$parent).length).to.be.equal(1);
+        expect($('.arrow-up', this.$parent).length).to.be.equal(1);
         this.evlevel.decr(30); // filler starts
-        expect($('.arrow-top', this.$parent).length).to.be.equal(0);
+        expect($('.arrow-up', this.$parent).length).to.be.equal(0);
         expect($('.arrow-right', this.$parent).length).to.be.equal(1);
         this.evlevel.incr(30); // extractor starts
         expect($('.arrow-right', this.$parent).length).to.be.equal(0);

@@ -113,8 +113,8 @@ var COMPONENTS = (function () {
     return {
       running : function() {
         var result = 0;
-        if (sensorAbove()) result = flowRate / Math.abs(flowRate);
-        if (sensorBelow()) result = -flowRate / Math.abs(flowRate);
+        if (sensorAbove()) result = flowRate / Math.abs(flowRate); // extracting
+        if (sensorBelow()) result = -flowRate / Math.abs(flowRate); // filling
         return result;
       },
       flowRate : function() {
