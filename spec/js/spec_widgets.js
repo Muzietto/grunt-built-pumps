@@ -1,10 +1,10 @@
 /*jshint asi: true, expr: true */
 
-var assert = require('assert')
-var sinon = require('sinon')
-var chai = require('chai')
-var expect = chai.expect
-chai.use(require('sinon-chai'))
+var assert = require('assert');
+var sinon = require('sinon');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('sinon-chai'));
 
 var components = require('../../public/js/head/components.js');
 var widgets = require('../../public/js/head/widgets.js');
@@ -152,12 +152,12 @@ describe('widget', function() {
     it('gets initialized inside the page with a width and a height in pixels', function() {
       var dims = {
         width : 100,
-        height : 200,
+        height : 200, // ignored. only volume area matters
         scale : 2
       };
       var basinBottom = 12;
       var basinLeft = 34;
-      var theBasin = widgets.basin(components.volume(1000, components.level(20)), dims).init(this.$parent, basinBottom, basinLeft).paint();
+      var theBasin = widgets.basin(components.volume(10000, components.level(20)), dims).init(this.$parent, basinBottom, basinLeft).paint();
 
       expect($('.widget_container', this.$parent).css('bottom')).to.be.equal('12px');
       expect($('.widget_container', this.$parent).css('left')).to.be.equal('34px');
@@ -288,11 +288,11 @@ describe('widget', function() {
   describe('feedbackSystem',function(){
     beforeEach(function() {
       this.evlevel = widgets.eventedLevel(5);
-      this.volume = components.volume(10, this.evlevel);
+      this.volume = components.volume(10000, this.evlevel);
       this.sensorAbove = components.sensorAbove(this.evlevel, 6);
       this.sensorBelow = components.sensorBelow(this.evlevel, 4);
       this.basinPos = { bottom : 100, left : 200 };
-      this.basinDims = { width : 100, height : 200 };
+      this.basinDims = { height : 200, scale : 1 };
       this.bidirPump = components.bidirectionalPump(this.volume, this.sensorAbove, this.sensorBelow, 1);
       var systemComponents = {
         volume : this.volume,
@@ -310,6 +310,9 @@ describe('widget', function() {
       expect($('.pump', this.$parent).length).to.be.equal(1);
       expect($('.basin.outer', this.$parent).length).to.be.equal(1);
       expect($('.liquid_probe', this.$parent).length).to.be.equal(2);
+
+      expect($('.basin.outer', this.$parent).css('width')).to.be.equal('100px');
+      expect($('.basin.outer', this.$parent).css('height')).to.be.equal('200px');
     });
   }); 
 
