@@ -1,8 +1,8 @@
 
-var evlevel = WIDGETS.eventedLevel(5);
+var evlevel = WIDGETS.eventedLevel(55);
 var volume = COMPONENTS.volume(10, evlevel);
-var sensorAbove = COMPONENTS.sensorAbove(evlevel, 6);
-var sensorBelow = COMPONENTS.sensorBelow(evlevel, 4);
+var sensorAbove = COMPONENTS.sensorAbove(evlevel, 60);
+var sensorBelow = COMPONENTS.sensorBelow(evlevel, 40);
 var basinPos = { bottom : 100, left : 200 };
 var basinDims = { width : 100, height : 200 };
 var bidirPump = COMPONENTS.bidirectionalPump(volume, sensorAbove, sensorBelow, 100);
