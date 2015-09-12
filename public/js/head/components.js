@@ -127,8 +127,8 @@ var COMPONENTS = (function () {
           if (sink && qty !== 0) sink.incr(qty);
         }
         if (filler.running()) {
-          qty = -source.decr(flowRate/10);
-          if (source && qty !== 0) volume.incr(qty);
+          qty = (source) ? -source.decr(flowRate/10) : flowRate/10;
+          if (qty !== 0) volume.incr(qty);
         }
       }
     };
