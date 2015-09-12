@@ -112,4 +112,7 @@ var directorId = setInterval(function() {
   bidirPump5.onTick();
 }, 5);
 
-//evlevel0.incr(40);
+var xxxcccc = 0;
+var signal = EVENTER({}).on('level_change',function(){
+  //console.log('level_change-->' + xxxcccc++);
+});
