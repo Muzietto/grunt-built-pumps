@@ -6,9 +6,9 @@ if (typeof module === 'object' && typeof module.exports !== 'undefined') {
 }
 
 EVENTER = EVENTER || eventerFactory();
- 
+
 var WIDGETS = function(eventer, components) {
-  
+
   function eventedLevel(start) {
     var _level = eventer(components.level(start));
     return {
@@ -52,8 +52,8 @@ var WIDGETS = function(eventer, components) {
         }
       };
     }
-    
-    function markup() { 
+
+    function markup() {
       return (template) ? template.process(sensor) : stdTemplate();
     }
 
@@ -66,7 +66,7 @@ var WIDGETS = function(eventer, components) {
       style['z-index'] = 99;
       return $(markup()).css(style);
     }
-    
+
     function stdTemplate() {
       var bkg = 'style="background-color:' + bkgColor(sensor) + '"';
       return '' +
@@ -76,7 +76,7 @@ var WIDGETS = function(eventer, components) {
         '  </div>' +
         '</div>';
     }
-    
+
     function bkgColor() {
       return sensor() ? 'red' : 'green';
     }
@@ -128,7 +128,7 @@ var WIDGETS = function(eventer, components) {
       if (_pos.bottom) style.bottom = _pos.bottom;
       if (_pos.right) style.right = _pos.right;
       style.width = _pos.width || 100;
-      style.height = _pos.height || 50;      
+      style.height = _pos.height || 50;
       style['z-index'] = 99;
       return $(markup()).css(style);
     }
@@ -146,13 +146,13 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
-  // dimensions are in pixels
+  // dimensions are in pixels. width is ignored
   function basin(volume, dimensions, template) {
-    var _$widget = $(''), _$parent, _bottom, _left;
-    dimensions = dimensions || {
+    var _$widget = $(''), _$parent, _bottom, _left,
+    _dimensions = {
       width : Math.round(Math.sqrt(volume.area())),
-      height : 80,
-      scale : 1 // volume_level/pixels
+      height : dimensions && dimensions.height || 80,
+      scale : dimensions && dimensions.scale || 1 // volume_level/pixels
     };
     return result();
 
@@ -180,7 +180,7 @@ var WIDGETS = function(eventer, components) {
       };
     }
 
-    function markup() { 
+    function markup() {
       return (template) ? template.process(volume) : stdTemplate();
     }
 
@@ -191,9 +191,9 @@ var WIDGETS = function(eventer, components) {
     }
 
     function stdTemplate() {
-      var basinDims = 'width:' + Math.ceil(dimensions.width / dimensions.scale) + 'px;' +
-                      'height:' + Math.ceil(dimensions.height / dimensions.scale) + 'px;';
-      var volumeDims = 'width:100%;height:' + Math.ceil(volumeHeight() / dimensions.scale) + 'px;';
+      var basinDims = 'width:' + Math.ceil(_dimensions.width / _dimensions.scale) + 'px;' +
+                      'height:' + Math.ceil(_dimensions.height / _dimensions.scale) + 'px;';
+      var volumeDims = 'width:100%;height:' + Math.ceil(volumeHeight() / _dimensions.scale) + 'px;';
       return '' +
         '<div class="widget_container absolute" id="">' +
         '  <div class="basin outer" style="background-color:lightcoral;border:1px solid black;'+ basinDims +'">' +
@@ -201,7 +201,7 @@ var WIDGETS = function(eventer, components) {
         '    <div class="basin inner absolute" id="" style="background-color:white;bottom:0px;left:0px;'+ volumeDims +'"></div>' +
         '  </div>' +
         '</div>';
-    }    
+    }
 
     // output is in mm, not in pixels!!
     function volumeHeight() {
@@ -210,8 +210,8 @@ var WIDGETS = function(eventer, components) {
   }
 
   // evented widget
-  function eventedBasin(volume, $parent, pos, template) {
-    var widget = eventer(basin(volume, undefined, template).init($parent, pos.bottom||0, pos.left||0));
+  function eventedBasin(volume, $parent, pos, dims, template) {
+    var widget = eventer(basin(volume, dims, template).init($parent, pos.bottom||0, pos.left||0));
     widget.on('level_change', function() { widget.repaint(); });
     return widget;
   }
@@ -223,7 +223,7 @@ var WIDGETS = function(eventer, components) {
     var product = eventer(result());
     product.on('level_change', product.repaint);
     return product;
-    
+
     function result() {
       return {
         repaint: function() {
@@ -243,8 +243,8 @@ var WIDGETS = function(eventer, components) {
         }
       };
     }
-    
-    function markup() { 
+
+    function markup() {
       return (template) ? template.process(pump) : stdTemplate();
     }
 
@@ -286,10 +286,10 @@ var WIDGETS = function(eventer, components) {
   }
 
   function feedbackSystem(systemComponents, $parent, basinPos, basinDims) {
-    var pumpPos = { bottom: basinPos.bottom + 10, left: basinPos.left - 20};
-    var basin = eventedBasin(systemComponents.volume, $parent, basinPos).paint();
-    var probeAbove = positionalProbe(systemComponents.sensorAbove, basin.domNode(), 15).paint();
-    var probeBelow = positionalProbe(systemComponents.sensorBelow, basin.domNode(), 50).paint();
+    var pumpPos = { bottom: basinPos.bottom + 40, left: basinPos.left - 40};
+    var basin = eventedBasin(systemComponents.volume, $parent, basinPos, basinDims).paint();
+    var probeAbove = positionalProbe(systemComponents.sensorAbove, basin.domNode(), 10).paint();
+    var probeBelow = positionalProbe(systemComponents.sensorBelow, basin.domNode(), 45).paint();
     var pumpWidget = bidirectionalPumpWidget(systemComponents.pump, $parent, pumpPos);
     return basin;
   }
@@ -304,7 +304,7 @@ var WIDGETS = function(eventer, components) {
     liquidProbe : liquidProbe,
     basin : basin,
     feedbackSystem : feedbackSystem
-  };  
+  };
 
 }(EVENTER, COMPONENTS);
 
