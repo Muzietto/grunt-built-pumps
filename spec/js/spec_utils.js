@@ -92,14 +92,36 @@ describe('eventer', function() {
       listener2.on('event', function() { check(); });
       eventer.trigger('event');
     });
-    it.skip('should allow usage of uuid-recognizable events', function() {
-      var one = eventer({});
-      var two = eventer({});
 
-      var listener = eventer({}, one);
-      listener.on('event', function() {})
-    })
+    describe('in case of uuid-labeled events', function() {
+      beforeEach(function() {
+        this.one = eventer({});
+        this.two = eventer({});
+        this.three = eventer({});
+      });
+      it('should listen to its own single publisher', function (done) {
+        var check = count(1, done);
+        var listener = eventer({}, this.one);
+        listener.onLocal('event', function () {
+          check();
+        });
 
+        this.one.trigger('event');
+        this.two.trigger('event');
+        this.three.trigger('event');
+      });
+      it('should listen to its own list of publishers', function (done) {
+        var check = count(2, done);
+        var listener = eventer({}, [this.one, this.two]);
+        listener.onLocal('event', function () {
+          check();
+        });
+
+        this.one.trigger('event');
+        this.two.trigger('event');
+        this.three.trigger('event');
+      });
+    });
 
   });
 
@@ -108,6 +130,7 @@ describe('eventer', function() {
     return function() {
       ok += 1
       if (ok === times) { done(); }
+      if (ok > times) { throw 'callback invoked too many times'; }
     };
   }
 });
