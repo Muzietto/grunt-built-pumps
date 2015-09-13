@@ -38,13 +38,8 @@ describe('eventer', function() {
   });
 
   it('should listen with multiple callbacks', function(done) {
-    var check = function() {
-      var ok = 0;
-      return function() {
-        ok += 1
-        if (ok === 2) { done(); }
-      };
-    }();
+
+    var check = count(2, done)
     this.eventer.on('event', function() { check(); })
     this.eventer.on('event', function() { check(); });
 
@@ -92,17 +87,27 @@ describe('eventer', function() {
       eventer(listener1);
       eventer(listener2);
 
-      var check = function() {
-        var ok = 0;
-        return function() {
-          ok += 1
-          if (ok === 2) { done(); }
-        };
-      }();
+      var check = count(2, done)
       listener1.on('event', function() { check(); })
       listener2.on('event', function() { check(); });
       eventer.trigger('event');
     });
+    it.skip('should allow usage of uuid-recognizable events', function() {
+      var one = eventer({});
+      var two = eventer({});
+
+      var listener = eventer({}, one);
+      listener.on('event', function() {})
+    })
+
+
   });
 
+  function count(times, done) {
+    var ok = 0;
+    return function() {
+      ok += 1
+      if (ok === times) { done(); }
+    };
+  }
 });
