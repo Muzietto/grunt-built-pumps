@@ -1,6 +1,6 @@
 
 var COMPONENTS = (function () {
-  'use strict'; 
+  'use strict';
 
   function level(start) {
     var _level = centify(start) || 0;
@@ -37,7 +37,7 @@ var COMPONENTS = (function () {
       },
       decr : function(val) {
         return handleDelta(val, level.decr);
-      }, 
+      },
       area : function() {
         return area;
       },
@@ -70,6 +70,11 @@ var COMPONENTS = (function () {
       return comparator(level.value(), threshold || 0);
     };
     result.threshold = function() { return threshold; };
+    if (level.trigger) {
+      result.ev_uuid = function () {
+        return level.ev_uuid();
+      };
+    }
     return result;
   }
 
@@ -96,14 +101,14 @@ var COMPONENTS = (function () {
       flowRate : function() {
         return flowRate;
       },
-      onTick : function() { 
+      onTick : function() {
         if (this.running()) {
           var volume = -source.decr(flowRate/10);
           if (sink && volume !== 0) sink.incr(volume);
         }
       }
     };
-    return result; 
+    return result;
   }
 
   function bidirectionalPump(volume, sensorAbove, sensorBelow, flowRate, source, sink) {
