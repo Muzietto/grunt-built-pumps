@@ -86,7 +86,7 @@ var WIDGETS = function(eventer, components) {
   // sensor must be based on an eventedLevel
   function positionalProbe(sensor, $parent, left, template) {
     var widget = eventer(liquidProbe(sensor, template).init($parent, {bottom:sensor.threshold()-15, left:left}));
-    widget.on('level_change', function() { widget.repaint(); });
+    widget.on('level_change', function() { widget.repaint(); }, sensor);
     return widget;
   }
 
