@@ -28,12 +28,15 @@ Type `evlevello.incr(20)` or `evlevello.decr(20)` in the console and watch the p
 The page contains also some initial experiments with HTML5 drag'n'drop functionalities. One day these pumps and sensors 
 will be all composed dragging and dropping their widgets onto the canvas.
 
-#### sample_01.html
+#### sample_02.html
 Click the `flowConn.switchOff()` button and watch the pump on the left restore automatically an acceptable water level (if the left sensor says it's necessary).
 
 Click the `flowConn.swithOn()` button and the pipe will start again draining water from the left basin.
 
 The pump on the right starts if there is too much water in the central basin and carries it in the rightmost one
+
+#### sample_03.html
+Showcase of bidirectional pumps. Bidir pumps are an abstraction that contains two (unidirectional) pumps with the same flow rate and swapping each other's source and sink.
 
 ## Grunt in development
 Run `grunt watch:lint_client` for automated linting and unit testing
