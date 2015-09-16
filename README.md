@@ -1,7 +1,7 @@
 # grunt-built-pumps
 Experiments with grunt while managing pumps and sensors (see [1])
 
-When the server is on, you may admire this app at http://node.faustinelli.org/grunt-built-pumps/
+When the remote node.js server is on, you may admire this app at http://node.faustinelli.org/grunt-built-pumps/
 
 The build process showcases the following grunt plugins:
 
