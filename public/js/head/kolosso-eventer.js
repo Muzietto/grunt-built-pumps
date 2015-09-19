@@ -1,3 +1,12 @@
+/*
+	KOLOSSO-EVENTER - JS events everywhere
+	Author: Marco Faustinelli (contacts@faustinelli.net)
+	Web: http://faustinelli.net/
+	     http://faustinelli.wordpress.com/
+	Version: 1.0
+
+	The Apache v.2 License - Copyright (c) 2015 Kolosso-Eventer Project
+*/
 
 function eventerFactory() {
   var eventedObjects = {};
@@ -72,4 +81,6 @@ if (typeof module === 'object' && typeof module.exports !== 'undefined') {
   };
 } else {
   var EVENTER = eventerFactory();
+  var eventer = EVENTER;
+  var ke = eventer;
 }
