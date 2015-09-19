@@ -1,7 +1,9 @@
 # grunt-built-pumps
 Experiments with grunt while managing pumps and sensors (see [1])
 
-When the server is on, you may admire this app at http://node.faustinelli.org/grunt-built-pumps/
+All events (involving pure JS objects and no DOM-nodes) are handled by [Kolosso-Eventer](https://github.com/Muzietto/kolosso-eventer)
+
+When the remote node.js server is on, you may admire this app at http://node.faustinelli.org/grunt-built-pumps/
 
 The build process showcases the following grunt plugins:
 
