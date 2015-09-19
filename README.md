@@ -29,7 +29,7 @@ Type `evlevello.incr(20)` or `evlevello.decr(20)` in the console and watch the p
 
 ![sample_01](/doc/img/sample_01.jpg)
 
-The page contains also some initial experiments with HTML5 drag'n'drop functionalities. One day these water systems 
+The page contains also some initial experiments with HTML5 drag'n'drop functionalities. One frabjous day these water systems 
 will be all composed dragging and dropping their widgets onto the canvas.
 
 ***
