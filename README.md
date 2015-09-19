@@ -1,19 +1,19 @@
 # grunt-built-pumps
-Experiments with grunt while managing pumps and sensors (see [1])
+Experiments with [grunt](http://gruntjs.com/) while managing pumps and sensors (see [1])
 
 All events (involving pure JS objects and no DOM-nodes) are handled by [Kolosso-Eventer](https://github.com/Muzietto/kolosso-eventer)
 
-When the remote node.js server is on, you may admire this app at http://node.faustinelli.org/grunt-built-pumps/
+When the remote node.js server feels like it, you may admire this app at [node.faustinelli.org/grunt-built-pumps/](http://node.faustinelli.org/grunt-built-pumps/)
 
 The build process showcases the following grunt plugins:
 
-- watch, jshint, simplemocha --> to allow TDD while developing
+- [watch](https://github.com/gruntjs/grunt-contrib-watch), [jshint](https://github.com/gruntjs/grunt-contrib-jshint), [simplemocha](https://github.com/yaymukund/grunt-simple-mocha) --> to allow TDD while developing
 
-- concat, uglify, processhtml --> to produce static, lean & mean HTML pages
+- [concat](https://github.com/gruntjs/grunt-contrib-concat), [uglify](https://github.com/gruntjs/grunt-contrib-uglify), [processhtml](https://github.com/dciccale/grunt-processhtml) --> to produce static, lean & mean HTML pages
 
-- bump, conventionalChangelog --> to version and document each release
+- [bump](https://github.com/gruntjs/grunt-contrib-bump), [conventionalChangelog](https://github.com/ajoslin/conventional-changelog) --> to version and document each release
 
-- ssh_deploy --> to deploy remotely
+- [ssh_deploy](https://github.com/dasuchin/grunt-ssh-deploy/) --> to deploy remotely
 
 
 ## Local demo:
@@ -29,7 +29,7 @@ Type `evlevello.incr(20)` or `evlevello.decr(20)` in the console and watch the p
 
 ![sample_01](/doc/img/sample_01.jpg)
 
-The page contains also some initial experiments with HTML5 drag'n'drop functionalities. One day these pumps and sensors 
+The page contains also some initial experiments with HTML5 drag'n'drop functionalities. One day these water systems 
 will be all composed dragging and dropping their widgets onto the canvas.
 
 ***
