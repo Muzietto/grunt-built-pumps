@@ -5,7 +5,7 @@ All events (involving pure JS objects and no DOM-nodes) are handled by [Kolosso-
 
 When the remote node.js server feels like it, you may admire this app at [node.faustinelli.org/grunt-built-pumps/](http://node.faustinelli.org/grunt-built-pumps/)
 
-The build process showcases the following grunt plugins:
+The [build process](Gruntfile.js) showcases the following grunt plugins:
 
 - [watch](https://github.com/gruntjs/grunt-contrib-watch), [jshint](https://github.com/gruntjs/grunt-contrib-jshint), [simplemocha](https://github.com/yaymukund/grunt-simple-mocha) --> to allow TDD while developing
 
