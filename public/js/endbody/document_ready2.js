@@ -23,7 +23,7 @@ var flowConnPipe = WIDGETS.pipe(flowConn, 'negative').init($('#parentDiv2'), {bo
 // removes water from lower basin
 var pumpOut = WIDGETS.pumpWidget(COMPONENTS.pump(volumeDown, sensorDown, 400, volumeFinal), $('#parentDiv2'), {bottom:43,left:390}, 'right');
 
-var evlevel0 = WIDGETS.eventedLevel(1);
+var evlevel0 = WIDGETS.eventedLevel(21);
 var volume0 = COMPONENTS.volume(30000, evlevel0);  // controlled by the bidir pump
 var evBasin0 = WIDGETS.eventedBasin(volume0, $('#parentDiv2'), {bottom:20,left:600}).paint();
 var sensorAbove0 = COMPONENTS.sensorAbove(evlevel0, 70);
@@ -33,6 +33,8 @@ var probeBelow0 = WIDGETS.positionalProbe(sensorBelow0, evBasin0.domNode(), 120)
 var bidirPump0 = WIDGETS.bidirectionalPumpWidget(COMPONENTS.bidirectionalPump(volume0, sensorAbove0, sensorBelow0, 600, volumeFinal, volumeUp), $('#parentDiv2'), {bottom:60,left:560});
 
 var flow0 = COMPONENTS.flow(volume0, null, 200);
+flow0.switchOff();
+
 var flowPipe0 = WIDGETS.pipe(flow0, 'negative').init($('#parentDiv2'), {bottom:1,left:750,width:100,height:30}).paint();
 $('#offButton').click(flowConn.switchOff);
 $('#onButton').click(flowConn.switchOn);

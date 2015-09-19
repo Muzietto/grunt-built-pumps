@@ -286,7 +286,7 @@ var WIDGETS = function(eventer, components) {
   }
 
   function feedbackSystem(systemComponents, $parent, basinPos, basinDims) {
-    var pumpPos = { bottom: basinPos.bottom + 40, left: basinPos.left - 40};
+    var pumpPos = { bottom: basinPos.bottom - 25, left: basinPos.left + 40};
     var basin = eventedBasin(systemComponents.volume, $parent, basinPos, basinDims).paint();
     var probeAbove = positionalProbe(systemComponents.sensorAbove, basin.domNode(), 10).paint();
     var probeBelow = positionalProbe(systemComponents.sensorBelow, basin.domNode(), 45).paint();

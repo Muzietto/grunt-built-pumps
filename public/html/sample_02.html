@@ -5,7 +5,7 @@
         <title>sample_02</title>
 
         <!-- build:css inline ../../build/temp/bundle.css -->
-        <link rel="stylesheet" type="text/css" href="../css/main.css"></link>
+        <link rel="stylesheet" type="text/css" href="../css/main.css"/>
         <!-- /build -->
 
         <!-- build:js inline ../../build/temp/head.min.js -->
@@ -22,15 +22,17 @@
     <body> 
         <h1 style="margin-left:20px;">grunt-built-pumps sample_02</h1>
         <div class="horizon relative" id="parentDiv2">
-        <button id="offButton" style="position:absolute;bottom:33px;left:0px;width:140px;margin:5px;padding:5px;">flowConn.switchOff()</button>
-        <button id="onButton" style="position:absolute;bottom:0px;left:0px;width:140px;margin:5px;padding:5px;">flowConn.switchOn()</button>
-        <button id="offButton0" style="position:absolute;bottom:99px;left:0px;width:140px;margin:5px;padding:5px;">flow0.switchOff()</button>
-        <button id="onButton0" style="position:absolute;bottom:66px;left:0px;width:140px;margin:5px;padding:5px;">flow0.switchOn()</button>
+            <button id="offButton" style="position:absolute;bottom:99px;left:0px;width:140px;margin:5px;padding:5px;">flowConn.switchOff()</button>
+            <button id="onButton" style="position:absolute;bottom:66px;left:0px;width:140px;margin:5px;padding:5px;">flowConn.switchOn()</button>
+            <button id="offButton0" style="position:absolute;bottom:33px;left:0px;width:140px;margin:5px;padding:5px;">flow0.switchOff()</button>
+            <button id="onButton0" style="position:absolute;bottom:0px;left:0px;width:140px;margin:5px;padding:5px;">flow0.switchOn()</button>
         </div>
-        <h5>Among the objects in this page <pre>var flowConn</pre> represents the flow of liquid inside the diagonal pipe. Its API allows to turn it off and on using respectively <pre>switchOff()</pre> and <pre>switchOn()</pre></h5>
+        <h5>Among the objects in this page <pre>var flowConn</pre> represents the flow of liquid inside the first diagonal pipe on the left. Its API allows to turn it off and on using respectively <pre>switchOff()</pre> and <pre>switchOn()</pre></h5>
         <h5>Click the <pre>flowConn.switchOff()</pre> button and watch the pump on the left restore automatically an acceptable water level (if the left sensor says it's necessary).</h5>
         <h5>Click the <pre>flowConn.swithOn()</pre> button and the pipe will start again draining water from the left basin.</h5>
-        <h5>The pump on the right starts if there is too much water in the central basin and carries it in the rightmost one.</h5>
+        <h5>The pump on the right starts (turns <em>green</em>) if there is too little water in the rightmost basin basin, taking it away from the one on its left.</h5>
+        <h5>Pumps keep running as long as their sensors request it, even if there is no water to take from their source basin. Watch out that flow rates are <em>relative</em> numbers.</h5>
+        <h5><pre>flow0</pre> (initially closed) is the diagonal pipe on the right side of the page. By acting on the four buttons you can have water flow through the whole system.</h5>
 
         <!-- build:js inline ../../build/temp/endbody2.min.js -->
         <script type="text/javascript" src="../js/endbody/document_ready2.js"></script>

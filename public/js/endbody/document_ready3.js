@@ -1,10 +1,11 @@
-var basinsBottom = 20;
+var basinsBottom = 70;
+var basinsLeftmost = 4;
 
 var evlevel0 = WIDGETS.eventedLevel(195);
 var volume0 = COMPONENTS.volume(10000, evlevel0);
 var sensorAbove0 = COMPONENTS.sensorAbove(evlevel0, 60);
 var sensorBelow0 = COMPONENTS.sensorBelow(evlevel0, 40);
-var basinPos0 = { bottom : basinsBottom, left : 70 };
+var basinPos0 = { bottom : basinsBottom, left : basinsLeftmost };
 var basinDims0 = { scale : 1, height : 200 };
 
 //////////////////////////////////////
@@ -12,7 +13,7 @@ var evlevel1 = WIDGETS.eventedLevel(95);
 var volume1 = COMPONENTS.volume(10000, evlevel1);
 var sensorAbove1 = COMPONENTS.sensorAbove(evlevel1, 60);
 var sensorBelow1 = COMPONENTS.sensorBelow(evlevel1, 40);
-var basinPos1 = { bottom : basinsBottom, left : 220 };
+var basinPos1 = { bottom : basinsBottom, left : basinsLeftmost + 150 };
 var basinDims1 = { scale : 1, height : 150 };
 
 //////////////////////////////////////
@@ -20,7 +21,7 @@ var evlevel2 = WIDGETS.eventedLevel(25);
 var volume2 = COMPONENTS.volume(10000, evlevel2);
 var sensorAbove2 = COMPONENTS.sensorAbove(evlevel2, 60);
 var sensorBelow2 = COMPONENTS.sensorBelow(evlevel2, 40);
-var basinPos2 = { bottom : basinsBottom, left : 370 };
+var basinPos2 = { bottom : basinsBottom, left : basinsLeftmost + 300 };
 var basinDims2 = { scale : 1, height : 100 };
 
 //////////////////////////////////////
@@ -28,7 +29,7 @@ var evlevel3 = WIDGETS.eventedLevel(75);
 var volume3 = COMPONENTS.volume(10000, evlevel3);
 var sensorAbove3 = COMPONENTS.sensorAbove(evlevel3, 60);
 var sensorBelow3 = COMPONENTS.sensorBelow(evlevel3, 40);
-var basinPos3 = { bottom : basinsBottom, left : 520 };
+var basinPos3 = { bottom : basinsBottom, left : basinsLeftmost + 450 };
 var basinDims3 = { scale : 1, height : 100 };
 
 //////////////////////////////////////
@@ -36,7 +37,7 @@ var evlevel4 = WIDGETS.eventedLevel(20);
 var volume4 = COMPONENTS.volume(10000, evlevel4);
 var sensorAbove4 = COMPONENTS.sensorAbove(evlevel4, 60);
 var sensorBelow4 = COMPONENTS.sensorBelow(evlevel4, 40);
-var basinPos4 = { bottom : basinsBottom, left : 670 };
+var basinPos4 = { bottom : basinsBottom, left : basinsLeftmost + 600 };
 var basinDims4 = { scale : 1, height : 100 };
 
 //////////////////////////////////////
@@ -44,7 +45,7 @@ var evlevel5 = WIDGETS.eventedLevel(55);
 var volume5 = COMPONENTS.volume(10000, evlevel5);
 var sensorAbove5 = COMPONENTS.sensorAbove(evlevel5, 60);
 var sensorBelow5 = COMPONENTS.sensorBelow(evlevel5, 40);
-var basinPos5 = { bottom : basinsBottom, left : 820 };
+var basinPos5 = { bottom : basinsBottom, left : basinsLeftmost + 750 };
 var basinDims5 = { scale : 1, height : 100 };
 
 ////////////////////////////////////////
