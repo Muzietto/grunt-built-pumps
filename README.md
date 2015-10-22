@@ -35,7 +35,7 @@ will be all composed dragging and dropping their widgets onto the canvas.
 ***
 
 #### sample_02.html
-Use the given buttons to swith on/off the two pipes in the system. Sensors alert pumps, which do their job. Water flows.
+Use the given buttons to switch on/off the two pipes in the system. Sensors alert pumps, which do their job. Water flows.
 
 ![sample_02](/doc/img/sample_02.jpg)
 
