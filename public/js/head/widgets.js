@@ -84,12 +84,18 @@ var WIDGETS = function(eventer, components) {
 
   // sensor threshold defines vertical position
   // sensor must be based on an eventedLevel
+  // evented widget
+  // repaints depending on a liquidProbe
+  // liquidProbe bkgColor depends on sensor reading
   function positionalProbe(sensor, $parent, left, template) {
     var widget = eventer(liquidProbe(sensor, template).init($parent, {bottom:sensor.threshold()-15, left:left}));
     widget.on('level_change', function() { widget.repaint(); }, sensor);
     return widget;
   }
 
+  // evented widget
+  // repaints depending on flow (a pump)
+  // flow running is like pump running
   function pipe(flow, incline, template) {
     var _$widget = $(''), _$parent, _pos;
     var widget = eventer(result());
@@ -210,12 +216,16 @@ var WIDGETS = function(eventer, components) {
   }
 
   // evented widget
+  // repaints depending on volume height
   function eventedBasin(volume, $parent, pos, dims, template) {
     var widget = eventer(basin(volume, dims, template).init($parent, pos.bottom||0, pos.left||0));
     widget.on('level_change', function() { widget.repaint(); });
     return widget;
   }
 
+  // repaints depending on pump running
+  // pump running depends on sensor readings
+  // sensor readings depend on evented levels
   function pumpWidget(pump, $parent, pos, orientation, template) {
     var _orientation = (typeof orientation === 'function') ? orientation : function() { return orientation; };
     var _$widget = $widget();
@@ -273,6 +283,9 @@ var WIDGETS = function(eventer, components) {
     }
   }
 
+  // repaints depending on pump situation
+  // pump situation depends on source/sink volumes
+  // pump volumes depend on evented levels
   function bidirectionalPumpWidget(pump, $parent, pos, template) {
     var result = pumpWidget(pump, $parent, pos, orientation);
     return result;
