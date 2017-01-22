@@ -8,7 +8,7 @@ chai.use(require('sinon-chai'));
 
 var components = require('../../public/js/head/components.js');
 var widgets = require('../../public/js/head/widgets.js');
-var eventer = require('../../public/js/head/eventer.js').eventer;
+var eventer = require('../../public/js/head/kolosso-eventer.js').eventer;
 
 describe('widget', function() {
   before(function(){

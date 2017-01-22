@@ -1,7 +1,7 @@
 var EVENTER, COMPONENTS;
 
 if (typeof module === 'object' && typeof module.exports !== 'undefined') {
-  EVENTER = require('./eventer.js').eventer;
+  EVENTER = require('./kolosso-eventer.js').eventer;
   COMPONENTS = require('./components.js');
 }
 

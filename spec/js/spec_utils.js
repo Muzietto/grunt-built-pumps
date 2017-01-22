@@ -7,7 +7,7 @@ var expect = chai.expect
 chai.use(require('sinon-chai'))
 
 require('../../public/js/utils/helpers.js');
-var eventer = require('../../public/js/head/eventer.js').eventer; 
+var eventer = require('../../public/js/head/kolosso-eventer.js').eventer; 
 
 describe('eventer', function() {
   beforeEach(function() {
