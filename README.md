@@ -8,7 +8,7 @@ All events (involving pure JS objects and no DOM-nodes) are handled by [Kolosso-
 
 Go to the [iterators online test page](http://rawgit.com/Muzietto/generatorz/master/Iterators_Chromium.htm).
 
-#### [sample_01.html](http://rawgit.com/Muzietto/grunt-built-pumps/master/public/html/sample_01.htm)
+#### [sample_01.html](http://rawgit.com/Muzietto/grunt-built-pumps/master/public/html/sample_01.html)
 Type `evlevello.incr(20)` or `evlevello.decr(20)` in the console and watch the pumps restore an acceptable water level.
 
 ![sample_01](/doc/img/sample_01.jpg)
@@ -18,14 +18,14 @@ will be all composed dragging and dropping their widgets onto the canvas.
 
 ***
 
-#### [sample_02.html](http://rawgit.com/Muzietto/grunt-built-pumps/master/public/html/sample_02.htm)
+#### [sample_02.html](http://rawgit.com/Muzietto/grunt-built-pumps/master/public/html/sample_02.html)
 Use the given buttons to switch on/off the two pipes in the system. Sensors alert pumps, which do their job. Water flows.
 
 ![sample_02](/doc/img/sample_02.jpg)
 
 ***
 
-#### [sample_03.html](http://rawgit.com/Muzietto/grunt-built-pumps/master/public/html/sample_03.htm)
+#### [sample_03.html](http://rawgit.com/Muzietto/grunt-built-pumps/master/public/html/sample_03.html)
 A chain of feedback systems, where bidirectional pumps maintain water levels between the desired values.
 
 ![sample_03](/doc/img/sample_03.jpg)
