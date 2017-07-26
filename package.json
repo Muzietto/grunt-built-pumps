@@ -8,7 +8,8 @@
     "url": "http://faustinelli.wordpress.com"
   },
   "scripts": {
-    "start": "node app_gbp"
+    "start": "node app_gbp",
+    "tests": "node_modules/mocha/bin/mocha spec/js/*.js"
   },
   "license": "GPL-2.0",
   "repository": {

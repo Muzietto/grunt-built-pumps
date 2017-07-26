@@ -11,28 +11,27 @@ var widgets = require('../../public/js/head/widgets.js');
 var eventer = require('../../public/js/head/kolosso-eventer.js').eventer;
 
 describe('widget', function() {
-  before(function(){
+  before(function() {
     var jquery = require('jquery');
     var myWindow = require('node-jsdom').jsdom('<html><head></head><body><div id="testParent"></div></body></html>',{url:'http://www.example.com'}).parentWindow;
     global.window = myWindow;
-    global.$ = jquery(myWindow); 
+    global.$ = jquery(myWindow);
   });
-  after(function(){
-    global.window = undefined; 
+  after(function() {
+    global.window = undefined;
   });
-  beforeEach(function(){ 
-
+  beforeEach(function() {
     this.$parent =  $('#testParent');
   });
-  afterEach(function(){ 
+  afterEach(function() {
     this.$parent.empty();
-  }); 
+  });
 
   describe('eventedLevel', function() {
     it('triggers event_change when it increases or decreases', function(done) {
       var counter = 0;
       eventer({}).on('level_change', function() {
-        counter ++; 
+        counter ++;
         if (counter === 1) done();
       });
       var evlo = widgets.eventedLevel(12);
@@ -62,7 +61,7 @@ describe('widget', function() {
       var probe = widgets.liquidProbe(components.sensorAbove(components.level(levelValue), sensorThreshold)).init(this.$parent, {bottom:0,left:0}).paint();
       var $probe = probe.domNode();
       expect($('.liquid_probe', $probe).css('background-color')).to.be.equal('green');
-    }); 
+    });
     it('has red bkg when the sensor function returns false', function() {
       var sensorThreshold = 16;
       var levelValue = 17;
@@ -77,7 +76,7 @@ describe('widget', function() {
       var sensorThreshold = 17;
       var evLevello = widgets.eventedLevel(15);
       var probe = widgets.positionalProbe(components.sensorAbove(evLevello, sensorThreshold), this.$parent, 50).paint();
-      var $probe = probe.domNode(); 
+      var $probe = probe.domNode();
       expect($probe.css('bottom')).to.be.equal(sensorThreshold - 15 + 'px');
     });
     it('reacts to level_change events triggered by its eventedLevel by changing background-color', function() {
@@ -97,14 +96,14 @@ describe('widget', function() {
       this.volumeUp = components.volume(25000, this.evlevelUp);
       this.evlevelDown = widgets.eventedLevel(5);
       this.volumeDown = components.volume(25000, this.evlevelDown);
-      this.flowConn = components.flow(this.volumeUp, this.volumeDown, 4000);      
+      this.flowConn = components.flow(this.volumeUp, this.volumeDown, 4000);
     });
     it('gets created with a flow and an incline', function() {
       var flowPipe = widgets.pipe(this.flowConn, 'negative');
       expect(flowPipe.init).to.be.not.undefined;
       expect(flowPipe.paint).to.be.not.undefined;
       expect(flowPipe.repaint).to.be.not.undefined;
-    }); 
+    });
     it('gets initialized inside the page as a diagonal line along with a display of the flowRate', function() {
       var flowPipe = widgets.pipe(this.flowConn, 'negative').init(this.$parent, {bottom:111,left:222,width:333,height:444}).paint();
       expect($('.pipe', this.$parent).hasClass('negative')).to.be.ok;
@@ -122,7 +121,7 @@ describe('widget', function() {
         var counter = 0;
         var probe = eventer({});
         probe.on('level_change', function() {
-          counter ++; 
+          counter ++;
           if (counter === 1) done();
         });
         probe.trigger('level_change');
@@ -133,7 +132,7 @@ describe('widget', function() {
         this.flowConn.switchOff();
         var counter = 0;
         var probe = eventer({}).on('level_change', function() {
-          counter ++; 
+          counter ++;
           if (counter === 1) done();
         });
         probe.trigger('level_change');
@@ -194,7 +193,7 @@ describe('widget', function() {
         var counter = 0;
         var probe = eventer({});
         probe.on('level_change', function() {
-          counter ++; 
+          counter ++;
           if (counter === 2) done();
         });
         this.evlevello.incr(5);
@@ -207,7 +206,7 @@ describe('widget', function() {
     });
   });
 
-  describe('pumpWidget', function() { 
+  describe('pumpWidget', function() {
     beforeEach(function() {
       this.evlevel = widgets.eventedLevel(55);
       this.sensor = components.sensorBelow(this.evlevel, 30);
@@ -219,7 +218,7 @@ describe('widget', function() {
       this.thePump = widgets.pumpWidget(components.pump(this.volume, this.sensor, -1500), this.$parent, this.pos, 'right');
     });
     it('gets created with a pump at its heart', function() {
-      expect(this.thePump.repaint).to.be.not.undefined; 
+      expect(this.thePump.repaint).to.be.not.undefined;
       expect(this.thePump.on).to.be.not.undefined;
       expect(this.thePump.trigger).to.be.not.undefined;
     });
@@ -247,7 +246,7 @@ describe('widget', function() {
     });
   });
 
-  describe('bidirectionalPumpWidget', function() { 
+  describe('bidirectionalPumpWidget', function() {
     beforeEach(function() {
       this.evlevel = widgets.eventedLevel(5);
       this.volume = components.volume(10, this.evlevel);
@@ -314,6 +313,6 @@ describe('widget', function() {
       expect($('.basin.outer', this.$parent).css('width')).to.be.equal('100px');
       expect($('.basin.outer', this.$parent).css('height')).to.be.equal('200px');
     });
-  }); 
+  });
 
 }); // end tests
