@@ -6,7 +6,7 @@ All events (involving pure JS objects and no DOM-nodes) are handled by [Kolosso-
 
 ## Public demo:
 
-#### [sample_01.html](http://rawgit.com/Muzietto/grunt-built-pumps/master/public/html/sample_01.html)
+#### [sample_01.html](https://muzietto.github.io/grunt-built-pumps/public/html/sample_01.html)
 Type `evlevello.incr(20)` or `evlevello.decr(20)` in the console and watch the pumps restore an acceptable water level.
 
 ![sample_01](/doc/img/sample_01.jpg)
